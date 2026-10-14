@@ -1,0 +1,200 @@
+{
+  "protocol": "coe1005_fixedsplit_v1.1",
+  "development_seed": 1024,
+  "selection": "highest validation Acc; earliest preregistered candidate on ties",
+  "candidates": [
+    {
+      "id": "c00",
+      "file": "c00.json",
+      "config": {
+        "hidden_dim": 256,
+        "dropout": 0.5,
+        "learning_rate": 0.01,
+        "weight_decay": 0.0005,
+        "epochs": 400,
+        "patience_checks": 200,
+        "optimizer": "TF1Adam",
+        "adaptation": "relation_union",
+        "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+        "feature_processing": "canonical_unchanged"
+      }
+    },
+    {
+      "id": "c01",
+      "file": "c01.json",
+      "config": {
+        "hidden_dim": 256,
+        "dropout": 0.3,
+        "learning_rate": 0.01,
+        "weight_decay": 0.0005,
+        "epochs": 400,
+        "patience_checks": 200,
+        "optimizer": "TF1Adam",
+        "adaptation": "relation_union",
+        "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+        "feature_processing": "canonical_unchanged"
+      }
+    },
+    {
+      "id": "c02",
+      "file": "c02.json",
+      "config": {
+        "hidden_dim": 256,
+        "dropout": 0.5,
+        "learning_rate": 0.01,
+        "weight_decay": 0.0,
+        "epochs": 400,
+        "patience_checks": 200,
+        "optimizer": "TF1Adam",
+        "adaptation": "relation_union",
+        "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+        "feature_processing": "canonical_unchanged"
+      }
+    },
+    {
+      "id": "c03",
+      "file": "c03.json",
+      "config": {
+        "hidden_dim": 256,
+        "dropout": 0.3,
+        "learning_rate": 0.01,
+        "weight_decay": 0.0,
+        "epochs": 400,
+        "patience_checks": 200,
+        "optimizer": "TF1Adam",
+        "adaptation": "relation_union",
+        "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+        "feature_processing": "canonical_unchanged"
+      }
+    },
+    {
+      "id": "c04",
+      "file": "c04.json",
+      "config": {
+        "hidden_dim": 256,
+        "dropout": 0.5,
+        "learning_rate": 0.005,
+        "weight_decay": 0.0005,
+        "epochs": 400,
+        "patience_checks": 200,
+        "optimizer": "TF1Adam",
+        "adaptation": "relation_union",
+        "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+        "feature_processing": "canonical_unchanged"
+      }
+    },
+    {
+      "id": "c05",
+      "file": "c05.json",
+      "config": {
+        "hidden_dim": 256,
+        "dropout": 0.3,
+        "learning_rate": 0.005,
+        "weight_decay": 0.0005,
+        "epochs": 400,
+        "patience_checks": 200,
+        "optimizer": "TF1Adam",
+        "adaptation": "relation_union",
+        "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+        "feature_processing": "canonical_unchanged"
+      }
+    },
+    {
+      "id": "c06",
+      "file": "c06.json",
+      "config": {
+        "hidden_dim": 256,
+        "dropout": 0.5,
+        "learning_rate": 0.005,
+        "weight_decay": 0.0,
+        "epochs": 400,
+        "patience_checks": 200,
+        "optimizer": "TF1Adam",
+        "adaptation": "relation_union",
+        "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+        "feature_processing": "canonical_unchanged"
+      }
+    },
+    {
+      "id": "c07",
+      "file": "c07.json",
+      "config": {
+        "hidden_dim": 256,
+        "dropout": 0.3,
+        "learning_rate": 0.005,
+        "weight_decay": 0.0,
+        "epochs": 400,
+        "patience_checks": 200,
+        "optimizer": "TF1Adam",
+        "adaptation": "relation_union",
+        "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+        "feature_processing": "canonical_unchanged"
+      }
+    },
+    {
+      "id": "c08",
+      "file": "c08.json",
+      "config": {
+        "hidden_dim": 256,
+        "dropout": 0.5,
+        "learning_rate": 0.001,
+        "weight_decay": 0.0005,
+        "epochs": 400,
+        "patience_checks": 200,
+        "optimizer": "TF1Adam",
+        "adaptation": "relation_union",
+        "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+        "feature_processing": "canonical_unchanged"
+      }
+    },
+    {
+      "id": "c09",
+      "file": "c09.json",
+      "config": {
+        "hidden_dim": 256,
+        "dropout": 0.3,
+        "learning_rate": 0.001,
+        "weight_decay": 0.0005,
+        "epochs": 400,
+        "patience_checks": 200,
+        "optimizer": "TF1Adam",
+        "adaptation": "relation_union",
+        "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+        "feature_processing": "canonical_unchanged"
+      }
+    },
+    {
+      "id": "c10",
+      "file": "c10.json",
+      "config": {
+        "hidden_dim": 256,
+        "dropout": 0.5,
+        "learning_rate": 0.001,
+        "weight_decay": 0.0,
+        "epochs": 400,
+        "patience_checks": 200,
+        "optimizer": "TF1Adam",
+        "adaptation": "relation_union",
+        "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+        "feature_processing": "canonical_unchanged"
+      }
+    },
+    {
+      "id": "c11",
+      "file": "c11.json",
+      "config": {
+        "hidden_dim": 256,
+        "dropout": 0.3,
+        "learning_rate": 0.001,
+        "weight_decay": 0.0,
+        "epochs": 400,
+        "patience_checks": 200,
+        "optimizer": "TF1Adam",
+        "adaptation": "relation_union",
+        "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+        "feature_processing": "canonical_unchanged"
+      }
+    }
+  ],
+  "notes": "Official lr=0.01/dropout=0.5/l2=5e-4 starting point; width256 fixed before validation; no extra feature normalization."
+}

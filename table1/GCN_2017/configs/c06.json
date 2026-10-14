@@ -1,0 +1,12 @@
+{
+  "hidden_dim": 256,
+  "dropout": 0.5,
+  "learning_rate": 0.005,
+  "weight_decay": 0.0,
+  "epochs": 400,
+  "patience_checks": 200,
+  "optimizer": "TF1Adam",
+  "adaptation": "relation_union",
+  "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
+  "feature_processing": "canonical_unchanged"
+}

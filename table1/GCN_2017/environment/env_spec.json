@@ -1,0 +1,46 @@
+{
+  "base": "clone /home/chenzhichao/miniconda3/envs/coe (Python3.10.21 torch2.1.1+cu121)",
+  "environment_name": "coe_baseline_gcn",
+  "system_pkgs": [
+    "git",
+    "tmux"
+  ],
+  "pip_phases": [],
+  "env": {
+    "CUDA_VISIBLE_DEVICES": "0",
+    "OMP_NUM_THREADS": "2",
+    "MKL_NUM_THREADS": "2",
+    "OPENBLAS_NUM_THREADS": "2",
+    "PYTHONPATH": "/home/chenzhichao/Research/other_exp",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "COE_DATA_ROOT": "/home/chenzhichao/Research/CoE2/data/CoE_dataset",
+    "COE_MULTIVIEW_DATA_ROOT": "/home/chenzhichao/Research/CoE2/data/Multi-view datasets",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8"
+  },
+  "run_commands": [],
+  "weight_dirs": {},
+  "tier": {
+    "cpus": 2,
+    "gpus": 1,
+    "physical_gpu": 0
+  },
+  "smoke": {
+    "import_names": [
+      "torch",
+      "numpy",
+      "scipy",
+      "shared.coe_benchmark"
+    ],
+    "gpu_tests": [
+      {
+        "cmd": "python reproduce/check.py --device cuda:0 --run-id fresh_equations",
+        "expect": "\"status\": \"passed\""
+      }
+    ],
+    "cli_checks": [
+      "nvidia-smi"
+    ]
+  },
+  "clone_trigger_required": "Recorded coe official tensorflow and GCN models import failures",
+  "framework": "PyTorch formula-preserving port; no dependency installations"
+}
