@@ -2,7 +2,7 @@
 
 基准代码：`/home/chenzhichao/Research/CoE2/conditional-joint-acm-tuning-1005`。协议标识：`coe1005_fixedsplit_v1.1`；制定日期：2026-10-14。本文首次制定依据实际源码及正式五种子产物；`coe` 环境保持只读。
 
-**执行策略修订（2026-10-14，按用户要求）：使用作者默认或论文推荐的固定配置，不进行超参数搜索。** 删除原先追加的每方法每数据集 12 候选调参要求，并保留作者原生模型宽度。数据身份、固定划分、正式五种子和验证 checkpoint 选择规则不变；数据契约与公共 API 版本不变。
+**执行策略修订（2026-10-14，按用户要求）：使用作者默认或论文推荐的固定配置，不进行超参数搜索。** 删除原先追加的每方法每数据集 12 候选调参要求，模型宽度、训练 epochs、早停参数和规则均保留作者默认设置。数据身份、固定划分、正式五种子和验证 checkpoint 选择规则不变；数据契约与公共 API 版本不变。
 
 18 个论文方法共对应 103 个“方法 × 数据集”组合，正式评估合计 **515 次训练**；必要功能和冒烟检查另计，不额外安排调参训练。MvCGE 暂无已核实的作者源码，其 25 次属于计划量。共享方法只保留一个目录，一次适配全部对应 Table。
 
@@ -74,7 +74,7 @@
 - **表 2 特征融合方法**：直接使用相同的文本/图像向量，保留其原生编码器、融合规则及损失。
 - **表 3 只有特征接口的方法**：为 MV-ACM/Citeseer 的关系视图使用统一、无参数、无标签的 `graph_to_feature_context_v1`：`X_eff=concat(X, row_l2(A^2 X))`，其中 A 是公共 loader 的该视图提供图；纯内容视图与无图数据集仍用 X。使用稀疏乘法，并记录变换后维度。该适配使方法获得来自相同关系的结构信息；它是输入接口适配，并不等价于 CCoE 的可学习图编码。QMF/ECML/LMF/UVF/AssoDMVC/TUNED 均采用这一统一入口，不得只给其中部分方法增加关系信息。
 - TUNED 等方法在上述入口上保留自己的邻域机制；不会获得 CCoE 的学习图。graph-to-feature 的规则本轮已预先指定，后续不得依据测试结果更换。
-- 若希望严格隔离“融合模块”的增益，另设所有方法 **包括 CCoE** 共用同一从头训练的视图编码器的补充实验；其 CCoE 结果必须重新运行，不能沿用当前 1005 行。主表仍应披露各方法原生/适配编码器和图输入差别。
+- 主表披露各方法原生/适配编码器和图输入差别。共享编码器的补充对照仅在用户明确要求后另设，不属于默认复现任务。
 
 主比较统一信息来源、划分、标签预算和评估规则，保留各方法的关键机制。方法本身选择使用哪种图算子或表示是设计差异，不能把所有方法替换成同一个融合网络后仍称为原方法。
 
@@ -84,7 +84,7 @@
 - 训练使用全部外层训练标签；不得采用原始 CoE 旧流程的 fit/calibration 标签缩减，再把结果当成 1005 同协议。
 - 所有监督损失、标签依赖的类关系、历史难度和原型只使用训练标签。无标签的全图特征与边可用于传导式学习，与 1005 保持一致。需要标签的邻域统计不能读取验证/测试标签。
 - 固定超参数后，验证集用于训练 checkpoint 选择和早停：按 **验证 ACC 严格改善**保存 best；并列取最早 epoch。不用验证集搜索学习率、dropout、正则系数或模型宽度。测试前恢复该 best checkpoint；不得每个 epoch 展示测试准确率，亦不得取最高测试 epoch。
-- 监督模型默认上限 400 epochs，每 epoch 验证，patience=200 次验证不改善；以正式 1005 配置为依据。这是统一训练/评估约定，应与作者原始训练预算的差异分别披露。不同方法保留自身优化器、必要阶段与训练结构。无监督表示方法默认预训练上限 400 + 下游头上限 400，明确记录两个阶段的更新数和耗时，不能宣称它与单阶段模型有相同算力预算。必要功能检查若发现未收敛，记录并报告，不自动扩大预算或启动参数搜索。
+- 训练 epochs、早停参数/停止规则、优化器和各训练阶段预算均使用作者默认或论文推荐设置，不统一改成 1005 的 400 epochs / patience 200。例如 GCN 上限 200 epochs、early_stopping=10，按官方验证损失移动均值停止；HAN 上限 200 epochs、patience=100，按官方验证 ACC 或 CE 改善/并列重置停止计数。停止规则与按验证 ACC 保存 best 是两个独立用途，应分别记录。无监督预训练及下游头也按作者默认预算运行；未收敛时记录并报告，不自行增加训练预算或搜索参数。
 - HDMI/DMG 的无监督表示训练不加入额外 CE 改成监督骨干；下游头只用外层训练标签。每个正式 seed 使用一个已固定评估流程，不保留官方脚本内部额外 10 次 probe 的平均，也不选择最好的 probe 测试结果。
 - 主指标为单标签节点/样本分类 `ACC=correct/N_test`。F1 可作为附加指标；聚类 ACC、回归误差、交叉验证 fold 均值均不能填主表。
 - 每个正式 seed 保存一个测试 ACC。统计百分比：`mean=mean(100*acc_seed)`，`std=std(100*acc_seed, ddof=1)`。不是总体标准差、标准误或跨 batch 标准差。
@@ -99,7 +99,7 @@
 
 **主复现直接采用作者默认或论文推荐配置，不运行网格搜索、随机搜索或验证集候选筛选。** 作者有对应数据集推荐配置时使用该配置；没有时使用官方通用默认配置。记录具体源码文件/参数项或论文依据，在正式训练前固定，不依据验证或测试分数另选超参数。若来源缺少必要参数或适配后必须新增参数，记录缺项及一个有依据的固定取值；无法确定会改变算法的关键设置时报告，不自行安排搜索。
 
-保留作者原生隐藏宽度、多头数、公共/私有分支、几何维度、优化器及损失参数；不统一扩大到 CCoE 的 256 维，也不复制 CCoE 的可靠性/对比损失。记录实际表示宽度和参数量。例如 GCN 固定隐藏 16、学习率 0.01、dropout 0.5、首层 L2 系数 0.0005；HAN 固定 8 个头 × 每头 8 维、学习率 0.005、特征/注意力 dropout 0.6、L2 系数 0.001。公共数据和第 2.2 节统一训练预算属于明确披露的复现适配。
+保留作者原生隐藏宽度、多头数、公共/私有分支、几何维度、优化器、训练预算、早停规则及损失参数；不统一扩大到 CCoE 的 256 维，也不复制 CCoE 的可靠性/对比损失。记录实际表示宽度和参数量。例如 GCN 固定隐藏 16、学习率 0.01、dropout 0.5、首层 L2 系数 0.0005；HAN 固定 8 个头 × 每头 8 维、学习率 0.005、特征/注意力 dropout 0.6、L2 系数 0.001。公共数据接口和验证 best-checkpoint 评估属于明确披露的复现适配；训练预算与停止规则使用作者默认值。
 
 每个“方法 × 数据集”直接从头运行正式 seeds 1024–1028；同一组合的五次使用同一固定配置，不复用冒烟或旧开发权重。必要 import、公式/梯度、短训练和 checkpoint 重放检查仅验证实现正确性，不用于挑参数。Best-view 控制按其定义使用验证集选择视图，须单独记录；这不授权方法超参数搜索。
 
@@ -107,7 +107,7 @@
 
 ### 2.4 环境规则
 
-先用 `/home/chenzhichao/miniconda3/envs/coe/bin/python` 做必要 import 检查、小样本前向/反向、真实小数据集短训练、checkpoint 保存与重放检查。**依赖清单能 import，不等于方法已经能跑。**
+先用 `/home/chenzhichao/miniconda3/envs/coe/bin/python` 检查当前实际运行实现的必要依赖，并做必要的小样本前向/反向、真实数据短训练及 checkpoint 检查。满足要求就直接使用 `coe`；只在实际所需库缺失或不兼容、确实无法运行时 clone 后微调依赖。**依赖清单能 import，不等于方法已经能跑。**
 
 当前只读探查：Python 3.10.21、torch 2.1.1+cu121、DGL 2.4.0+cu121、NumPy 1.26.4、SciPy 1.15.3、sklearn 1.5.2；主机 CUDA 可用，8 张 GPU。TensorFlow、PyG、torch_sparse、torch_scatter 尚不可 import。沙箱中 CUDA 不可见不算真实环境故障，须在同一主机可访问 GPU 的执行环境复核。记录见 [registry/environment_probe.json](registry/environment_probe.json)。
 
@@ -120,7 +120,7 @@
 
 替换占位符后执行。记录触发 clone 的具体错误、环境名和包差异；安装前核对 Python/PyTorch/CUDA 的 wheel 兼容性。优先只安装方法实际需要的库，避免照搬包括无关音视频/LLM 任务的整份 requirements。框架迁移或公式等价实现也须披露，不能伪称未经改动的官方代码。
 
-GCN/HAN 官方代码为旧 TensorFlow；先尝试导入并记录失败，再 clone coe，在副本尝试兼容层。若 TF1 API/算子无法兼容 Python3.10，可在副本调整 Python/框架，或提供逐模块对照的 PyTorch 等价移植；不强装不兼容 TF1 包。PyG 扩展版本须匹配实际 torch/CUDA。MCR/SynIB 优先提取向量特征任务需要的最小核心，避免为了未使用的预训练模型升级整套 torch。
+GCN/HAN 官方代码为旧 TensorFlow；记录旧框架兼容性，并优先保留算法公式与默认参数。必要时可提供逐模块对照的 PyTorch 等价移植；若该实际执行实现已能在 `coe` 跑通，就直接使用 `coe`，不因为没有使用的 TensorFlow 缺失而要求 clone，也不强装不兼容 TF1 包。只有实际执行所需库仍不满足时才 clone 调整。PyG 扩展版本须匹配实际 torch/CUDA。MCR/SynIB 优先提取向量特征任务需要的最小核心，避免为了未使用的预训练模型升级整套 torch。
 
 ### 2.5 目录、结果与 Git
 
@@ -170,7 +170,7 @@ CoE 已按要求不存放此库，但仍是论文中的前作基线。当前 CoE
 
 先执行 P00 建立公共实现，然后逐个复制下面的完整代码块给新的复现会话。每个 prompt 指向本文件，公共约束因此不需要重复粘贴。新会话必须实际读文件，不得只看方法名。
 
-建议先做数据契约及简单控制，再做 MMDynamics/ECML/LMF、GCN/HAN、HDMI/InfoMGF/DMG、其余方法。最后扩展到大图，不能把小数据集冒烟结果当成完整复现。
+先核对公共数据契约，然后按用户指定的方法顺序执行固定默认配置复现。简单控制、消融或额外对照仅在用户明确要求后执行。最后扩展到大图，不能把小数据集冒烟结果当成完整复现。
 
 **后续 prompt 的范围是实现并运行指定方法，不是本轮已经完成了这些训练。** 使用当前会话模型；不启动子代理或切换付费模型，除非用户在对应复现会话明确授权。
 
@@ -193,7 +193,7 @@ CoE 已按要求不存放此库，但仍是论文中的前作基线。当前 CoE
 唯一目录：/home/chenzhichao/Research/other_exp/table1/GCN_2017。
 一次支持 acm dblp yelp amazon mag；正式 seeds=1024 1025 1026 1027 1028。
 核对 sources.json 对应官方 tkipf/gcn；先读 code/gcn/models.py、layers.py、utils.py、train.py。保留两层 GCN、图归一化和监督目标，统一采用公共 relation_union，不能按测试分数选某个关系图。实现准确的 train/val/test mask 接口。
-官方为 TF1：先记录 coe 导入/冒烟情况，失败才 clone coe_baseline_gcn。若选择 PyTorch 等价移植，在 ADAPTATION.md 对照图卷积公式、激活、dropout、正则项和初始化；不能把其他 GNN 名为 GCN。
+官方为 TF1：记录兼容性，检查实际执行实现能否在 coe 跑通，能则直接使用；实质依赖失败才 clone coe_baseline_gcn。若选择 PyTorch 等价移植，在 ADAPTATION.md 对照图卷积公式、激活、dropout、正则项和初始化；不能把其他 GNN 名为 GCN。
 核对作者固定默认配置并完成必要功能检查，直接完成五个数据集五种子，重放 best 及预测 Acc，输出各数据集 mean±sample std。MAG 用稀疏计算，不缩小图。log/exp 全部在该目录。只提交核心代码/配置，输出候选表格行，不改论文。使用当前模型，不启动子代理。
 ```
 
@@ -205,7 +205,7 @@ CoE 已按要求不存放此库，但仍是论文中的前作基线。当前 CoE
 目录：/home/chenzhichao/Research/other_exp/table1/HAN_2019。
 一次支持 acm dblp yelp amazon mag，seeds=1024–1028；不是作者自带 ACM3025/DBLP 的数据版本。
 先读 code/ex_acm3025.py、models/gat.py、models/base_gattn.py、utils/layers.py，核对邻域节点注意力和跨关系语义注意力。用公共数据每个关系作为输入通道；不重建其他版本的元路径、节点或 masks，不丢关系。
-官方为旧 TensorFlow。先测试 coe，确实失败再 clone coe_baseline_han；必要的 PyTorch 移植须与论文及官方机制逐项对应，保留多头和语义聚合，披露总输出维度/参数量。
+官方为旧 TensorFlow。先在 coe 测试实际执行实现，能则直接使用，实质依赖失败再 clone coe_baseline_han；必要的 PyTorch 移植须与论文及官方机制逐项对应，保留多头和语义聚合，披露总输出维度/参数量。
 避免官方稠密 NxN attention/bias 在 MAG 造成内存爆炸；等价稀疏实现须在小图上核对，不能用截断样本换取能跑。验证 Acc 只选择训练 checkpoint；固定作者默认配置完成五次完整汇总和 checkpoint 重放。所有 log/exp 在本方法目录，提交核心实现和适配说明，不改论文。使用当前模型，不启动子代理。
 ```
 
@@ -351,9 +351,9 @@ coe 的 DGL 与官方老版本不同，先前向/反向及稀疏算子冒烟；�
 目录：/home/chenzhichao/Research/other_exp/table2/MCR_2025。
 一次支持 esp flickr iapr nus，seeds=1024–1028。
 优先读 code/models/MCR_Model_StandAlone.py、MCR_Models.py 与原生 Trainer 中 loss 路径，核对论文各正则项、系数和梯度边界。使用公共两模态静态向量的独立投影代替音视频/大预训练 encoder，保留 MCR 训练目标，不用 generic CE/InfoNCE 代替其机制。
-另提供同一 backbone/fusion、关闭 MCR 正则的 base_fusion 对照，以明确训练目标增益；该对照额外 20 次，单独命名与汇总，不算入 MCR 的五次。监督对比项/样本关系只使用训练标签，完整记录 backbone、各损失和参数量。
+监督对比项/样本关系只使用训练标签，完整记录 backbone、各损失和参数量。本任务只运行 MCR 本身，不自动增加 base_fusion 消融或额外对照。
 先在 coe 做最小 MCR 前向反向检查；需要 pytorch_metric_learning 等才 clone coe_baseline_mcr 并安装最小依赖，关闭 wandb 外部上传。预先冻结 MCR variant/config，不依据 test 选版本。
-完成 MCR 的 20 次及 base_fusion 对照，val 选择 checkpoint、test 最终评估和重放。产物在本目录 log/exp，提交核心代码并披露 feature-level adaptation。使用当前模型，不启动子代理。
+完成 MCR 本身的 20 次，val 选择 checkpoint、test 最终评估和重放。产物在本目录 log/exp，提交核心代码并披露 feature-level adaptation。使用当前模型，不启动子代理。
 ```
 
 ## P15：SynIB（Table 2，20 次）
@@ -365,9 +365,9 @@ coe 的 DGL 与官方老版本不同，先前向/反向及稀疏算子冒烟；�
 一次支持 esp flickr iapr nus，seeds=1024–1028。
 优先读 code/src/synib/models/vlm/synib_mask_model.py 中 SynIB/FusionIBModel_Mask、README objective 和对应配置。用公共静态文本/图像向量建立 feature-level 入口，保留原生模态遮蔽、反事实前向、KL 置信度惩罚及其梯度/掩码机制，不把 masking-only 或普通 dropout 写成 SynIB。
 正式主 variant 采用作者主实验设置，在训练前固定并写明，不用验证分数挑 variant；若采用 learned mask，完整保存其参数及训练状态，不能为了省事换成未登记的 random mask。推理使用原生完整模态预测，不用测试标签定义 synergy 子集再只对该子集报主 Acc。
-另跑相同 backbone/fusion、正则关闭的 base_fusion 对照，额外 20 次单独汇总；若与 MCR 对照复用，必须代码、配置、seed、checkpoint 和协议逐项相同并记录来源，不能只因名称相同就复用。
+本任务只运行 SynIB 本身，不自动增加 base_fusion 消融、复用对照或额外实验。
 先尝试 coe 核心路径，不为无关 VLM 强制升级 torch2.9.1。确有缺失/不兼容才 clone coe_baseline_synib；惰性化未使用依赖需披露，核心公式不改。
-完成 20 次及匹配对照，val 选 best、冻结 test、重放与 sample std。产物在本目录 log/exp，提交核心代码。使用当前模型，不启动子代理。
+完成 SynIB 本身的 20 次，val 选 best、冻结 test、重放与 sample std。产物在本目录 log/exp，提交核心代码。使用当前模型，不启动子代理。
 ```
 
 ## P16：TUNED（Table 3，25 次）
@@ -404,12 +404,12 @@ coe 的 DGL 与官方老版本不同，先前向/反向及稀疏算子冒烟；�
 目录：/home/chenzhichao/Research/other_exp/table3/UVF_2026。
 一次支持 mv_acm mv_citeseer mv_prokaryotic mv_reuters1200 mv_wikipedia，seeds=1024–1028。
 读 code/model.py、layers.py、trainKL.py、dataset.py、utils.py，保留不确定性估计、强弱视图差异化特征选择与融合。trainKL.py 固定三视图、model.py 存在固定 dim=128：泛化任意 V=2/3/5 和原始不等维，将宽度配置化并检查所有相关层，不能裁剪 Prokaryotic 的特征。使用公共 graph_to_feature_context_v1。
-官方主循环评估并选择 best_acc 且 epochs=10：建立统一 train/val/test runner，按统一训练预算运行并记录收敛情况，不自动增加调参任务；按 val 保存 best；不得用原 test 选择或跨验证 folds 的最好分数填表。
+官方主循环评估并选择 best_acc 且 epochs=10：建立统一 train/val/test runner，保留作者默认 epochs=10 及原生训练设置并记录收敛情况，不自动增加训练预算或调参任务；按 val 保存 best；不得用原 test 选择或跨验证 folds 的最好分数填表。
 MC dropout 是原生不确定性机制，不能为普通 eval() 方便将其关闭。固定 MC 次数、推理 RNG、batch 组成与顺序；不要反复抽样挑测试分数。删除/重定向 forward 中 ./pig 等输出到本方法 exp，保持核心数学机制。
 先尝试 coe，实质失败才 clone coe_baseline_uvf。冻结配置后完成 25 次，重放 checkpoint 和预测、汇总 sample std。产物在本目录 log/exp，提交核心代码与适配说明。使用当前模型，不启动子代理。
 ```
 
-## P19：三个简单控制（建议补齐，额外 210 次）
+## P19：三个简单控制（仅在用户明确要求后执行）
 
 ```text
 请先完整阅读 /home/chenzhichao/Research/other_exp/REPRODUCTION_PROTOCOL_AND_PROMPTS.md，为 Best-view、Mean、Concat+MLP 实现统一的 controls/ 入口，同时支持全部 14 个数据集。
