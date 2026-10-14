@@ -1,101 +1,120 @@
-# HAN Table 1 adaptation
+# HAN: fixed author defaults and public benchmark data
 
-Source: official [Jhy1993/HAN](https://github.com/Jhy1993/HAN), commit
-`71bac29a07fb8fab908d50a806a7bc38aa6c6611`, recorded in `sources.json`.
-This is a disclosed PyTorch/DGL equivalent port, not an unmodified TF execution.
-Executor: user-authorized HAN child agent inheriting the current Codex session model.
-No model override; Astra and independent reviewer are not_run; no nested subagent.
-Exact session model identifier is not exposed by the available tools and is not guessed.
+Official source: [Jhy1993/HAN](https://github.com/Jhy1993/HAN), commit
+`71bac29a07fb8fab908d50a806a7bc38aa6c6611`, verified against sources.json.
+The code is a disclosed PyTorch/DGL port of **HeteGAT_multi**, which is selected by
+`code/ex_acm3025.py`; it is not the ordinary GAT or an unchanged TensorFlow execution.
+Executor: user-authorized HAN child agent inheriting current session model; no model
+override, Astra/reviewer not_run, no nested subagent. Exact model identifier is not
+exposed by the available tools and is not guessed.
 
-## Exact official variant and mechanisms
+## Fixed configuration, with no HPO
 
-`code/ex_acm3025.py` selects `model = HeteGAT_multi`, not the plain GAT class.
-For every supplied relation it creates eight independent `attn_head` functions,
-concatenates their outputs, calls `SimpleAttLayer`, then one dense classifier.
-The public benchmark supplies its own five network datasets; no ACM3025 MAT,
-author masks, synthetic meta-paths, reference model, or reference weights enter.
+`configs/default.json` records the official source and exact defaults: learning rate
+.005, L2 coefficient .001, feature and attention dropout .6, one relation-attention
+layer, eight heads of eight channels (**64** total), semantic attention128, one dense
+output head, ELU, no residual, TF1Adam. Source is ex_acm3025.py lines22–35 and its
+training feed with attn_drop=.6/ffd_drop=.6. All five datasets and five seeds use
+this fixed configuration, without validation-based configuration selection.
 
-| Official implementation | Equivalent port |
+The latest user instruction restores original **epochs200 and patience100**. Native
+stopping resets curr_step when validation Acc >= its historical maximum **or**
+validation CE <= its historical minimum, including ties; otherwise it increments,
+and stops at100. Validation CE excludes L2, as official evaluation does. This rule
+is kept separately from checkpoint selection: the public best checkpoint rule is
+strictly improving validation Acc, earliest tie. Original combined Acc-and-loss
+checkpoint save is replaced only for this common evaluation requirement. These
+native budgets supersede the previous400/200 benchmark default for this run.
+
+Previously generated 256-width HPO runs are preserved under their existing exp/log
+folders; the old formal queue failed on score replay and is **not successful**.
+Its configurations and scores are not used to choose or initialize the new fixed64
+runs. Historical search_space.json is archived as an ignored artifact. No summaries
+or candidate paper values are generated automatically by the new queue.
+
+## Correspondence to the released implementation
+
+| Official module | Port |
 |---|---|
-| `utils/layers.py:attn_head`, no-bias size-1 convolution | independent per-head `Linear(d,32,bias=False)`; Xavier uniform |
-| `f_1` and `f_2` size-1 convolution with bias | independent receiver/sender `Linear(32,1,bias=True)`, Xavier uniform, zero bias |
-| `softmax(leaky_relu(f1_i+f2_j)+bias_mat)` | binary positive-edge support, leaky slope .2, DGL `edge_softmax(norm_by='dst')` |
-| `tf.matmul(coefs,seq_fts)` | fused `u_mul_e_sum`, row receiver / column sender |
-| `tf.contrib.layers.bias_add` and ELU | zero initialized head bias and ELU; no residual |
-| original feature dropout before projection AND after projection | separate inverted Bernoulli masks at both places for every head |
-| original coefficient dropout after softmax | inverted coefficient dropout; no neighbor truncation |
-| `SimpleAttLayer`, w/b/u normal(std=.1), tanh | identical trainable w/b/u shapes and normal initialization |
-| final dense output and one output head | Xavier uniform `Linear(256,C)`, zero bias; no extra classifier dropout |
-| masked softmax CE | mean single-label CE on exactly all outer train nodes |
-| Adam default parameters | custom TF1Adam beta(.9,.999), epsilon1e-8 in uncorrected denominator; no optimizer weight_decay |
-| `tf.nn.l2_loss` summed by BaseGAttN | explicit `.5*l2*sum(p²)` over every trainable tensor |
+| attn_head no-bias 1x1 convolution | independent per-head Linear(input,8,bias=False), Xavier uniform |
+| f_1/f_2 convolutions with bias | receiver/sender Linear(8,1), Xavier uniform, zero bias |
+| leaky_relu(f1_i+f2_j), masked neighbor softmax | slope .2, positive edge support, DGL destination edge_softmax |
+| coefs times projected features | fused u_mul_e_sum with column sender and row receiver |
+| bias_add, ELU, no residual | zero head bias, ELU, no residual |
+| feature dropout before projection and after projection | two independent inverted Bernoulli masks per head |
+| coefficient dropout after softmax | separate inverted coefficient dropout, no truncated neighbors |
+| SimpleAttLayer w/b/u normal(std=.1), tanh | identical trainable shapes and initialization |
+| final one-head dense classifier | Xavier uniform Linear(64,C), zero bias, no extra dropout |
+| masked softmax cross-entropy | mean single-label CE over all outer train nodes |
+| TF1Adam | explicit bias-corrected step with epsilon in uncorrected second-moment denominator |
+| tf.nn.l2_loss filtering actual variable names | .5*l2*sum(p^2) including every bias tensor |
 
-Official `BaseGAttN.training` excludes exact variable names `bias/gamma/b/g/beta`;
-TF actual names include scopes and `:0`, so the check does not exempt bias tensors.
-The port preserves this actual behavior, including semantic and classifier biases.
+BaseGAttN checks exact names bias/gamma/b/g/beta, whereas actual TF variable names
+include scope and :0; thus its filter regularizes all trainable tensors. This actual
+behavior is preserved. TF1Adam uses m=.9m+.1g, v=.999v+.001g²,
+lr_t=lr*sqrt(1-.999^t)/(1-.9^t), update -= lr_t*m/(sqrt(v)+1e-8).
+Ordinary PyTorch Adam places epsilon differently, so an independent literal update
+oracle checks the custom implementation and state restoration.
 
-**Semantic detail:** `SimpleAttLayer` receives `[N,V,D]` and applies `softmax`
-to the relation dimension for each node. It does not average scores across all
-nodes. The paper's semantic-level formula describes global node averaging;
-we retain the released ACM-entrypoint implementation and explicitly name this
-variant `official_HeteGAT_multi`. This distinction is not hidden by calling it
-a global semantic-attention implementation. Full graph inputs are used; there
-is no local batch approximation of semantic aggregation.
+SimpleAttLayer receives [N,V,D] and computes relation softmax **per node**, without
+averaging across nodes. The paper describes global semantic-score averaging; this
+port explicitly retains the released ACM HeteGAT_multi implementation. It does not
+claim to implement a global semantic-attention variant or a sampled-batch substitute.
 
-TF1 Adam update is implemented explicitly: m_t=.9*m_(t−1)+.1*g,
-v_t=.999*v_(t−1)+.001*g², lr_t=lr*sqrt(1−.999^t)/(1−.9^t),
-parameter -= lr_t*m_t/(sqrt(v_t)+1e−8). Ordinary torch.optim.Adam places
-epsilon after bias correction; this port retains TF1 placement. A literal
-independent update oracle tests small gradients and optimizer-state restoration.
+For V relations with dimensions d_v and C classes, trainable parameter count is
+sum_v(64*d_v + 8*(2*8+2+8)) + 64*128 + 2*128 + 64*C + C.
+Actual counts are exported in each manifest; evaluation copies have no trainable
+parameters and do not change the native architecture.
 
-## Public input and graph support
+## Data, graph direction and sparse computation
 
-All `shared.coe_benchmark` canonical features, all relations, labels and masks
-are preserved and verified before use. The public features receive no additional
-normalization. HAN's own `adj_to_bias(...,nhood=1)` uses edge existence, so each
-provided relation is converted to positive support with exactly one self-loop.
-Original normalization weights are not used as extra attention weights; this is
-disclosed model-native support conversion, not `relation_union`. Relations remain
-separate. No symmetrization, removed relation, remapped node, or selected relation.
-The resulting support hash is separate from canonical and CCoE learned-graph hashes.
+Namespaced shared.coe_benchmark provides canonical features/labels/masks and every
+relation. All sample/split/class/feature fingerprints are verified. No author data,
+new meta-path, remapped node, omitted view, or reference model/weight is used.
+Each relation remains separate. Official adj_to_bias(nhood=1) uses edge existence;
+the port uses positive provided-adj edges with exactly one self-loop. Existing edge
+normalization weights are not extra attention weights. There is no relation_union,
+symmetrization or test-based relationship selection. Support hash is stored separately
+from canonical source and CCoE learned-graph hashes.
 
-Sparse DGL graph edges have `src=column,dst=row`. `u_add_v`, destination softmax,
-and fused `u_mul_e_sum` preserve the dense directed formula. Heads execute separately;
-no dense NxN matrix and no E×heads×hidden message tensor are materialized. All MAG
-113919 nodes, four classes, and both full relations are used. Sparse GPU reductions
-can use atomics; seeds/deterministic settings do not promise bitwise identical training.
+DGL src=column,dst=row preserves the row-receiver direction. Sparse u_add_v,
+edge_softmax(dst), and fused u_mul_e_sum avoid NxN attention and E*heads*hidden
+message tensors. Full MAG uses all113919 nodes, four classes, both complete relations.
 
-## Capacity and training changes required by the benchmark
+## Actual replay failure and precision repair
 
-Official ACM uses 8 heads × 8 channels =64. The registered primary comparison uses
-8 ×32 =256, the protocol-preferred width; eight-head structure and two-level attention
-remain unchanged. Semantic attention width128 and one output head remain official.
-For V relations, input dimensions d_v, C classes, total trainable parameters are
-`sum_v(256*d_v + 8*(2*32+2+32)) + 256*128 + 2*128 + 256*C + C`.
-Exact actual counts are written to each manifest; no unused capacity padding.
+The old formal ACM seed1024 run failed shared verify_model_replay with
+`ValueError: Model replay scores differ`. From its selected epoch35 checkpoint,
+repeated identical FP32 DGL CUDA evaluations showed maximal logit differences
+1.43e-6 to1.91e-6, with identical class predictions. This exceeds the existing1e-6
+absolute score assertion. Diagnosis is preserved in
+exp/smoke_replay_diagnosis_20261014/diagnosis.json; old failure logs remain intact.
 
-Training budget is400 epochs, validation every epoch, patience200, replacing
-official200 epochs/patience100. Original script prints test results during training
-and has combined loss/Acc selection; the benchmark selects strictly improving
-validation Acc, earliest tie, then restores best. Development never evaluates test.
-Twelve ordered candidates (lr .005/.001/.01, l2 .001/.0001, dropout .6/.3) are registered
-before the batch. Each dataset develops only seed1024; all twelve must complete,
-then the winning validation configuration is frozen and five formal seeds restart
-from scratch. Each formal seed exports test once and performs fresh-object plus
-independent-process checkpoint replay. No formal test score influences tuning.
+With the same weight values, formula and full graph evaluated in FP64, repeated
+logit differences were at most3.55e-15. The new runner keeps training/optimizer in
+FP32. **Every validation, restored-best evaluation, final export, fresh-object replay
+and independent-process replay uses the same FP64 GPU evaluation path.** The
+inference model and feature tensors are independent dtype copies; training model
+and canonical features/hashes are never cast in place. Logits are saved as FP64.
+There is no rounding, tolerance relaxation or prediction-only score bypass. Shared
+verify_model_replay keeps its original atol1e-6 and receives newly computed scores.
 
-## Environment and evidence
+GPU atomic reductions still do not guarantee bitwise determinism; FP64 reduces
+roundoff well below the existing assertion rather than claiming exact CUDA bitwise
+identity. Manifest config/adaptation record both precisions and actual requested
+GPU. Trajectories record validation time and peak GPU allocation, result timing
+records final inference time, so additional precision cost is visible.
 
-Actual coe TensorFlow import failed with `ModuleNotFoundError: No module named tensorflow`.
-Before clone, environment spec and concrete probe were saved under `environment/`.
-`coe_baseline_han` is a clone of coe; no packages were installed, removed, or upgraded.
-PyTorch2.1.1+cu121 / DGL2.4.0+cu121 already passed a physical-GPU1 sparse forward/backward
-kernel witness. Old TF1/tf.contrib is not force-installed into Python3.10. The original
-coe and reference1005 directories are unchanged. Environment spec canonical digest
-is used by the parent's compute ledger. No independent agent-follows-doc review
-was run by this agent, because a further subagent was not authorized.
+## Environment and checks
 
-`reproduce/checks.py` compares full two-relation HAN outputs, semantic weights,
-all parameter and input gradients against the independent dense formula on asymmetric
-small graphs. Real ACM short training and full MAG update/validation are smoke-only;
-their artifacts are excluded from formal summaries. Failure logs remain on disk.
+Original coe lacks TensorFlow; that historical failure and clone remain documented.
+The current port needs only installed torch2.1.1+cu121/DGL2.4.0+cu121, so per latest
+user instruction it is checked and run **directly in coe**, without changing packages.
+Historical coe_baseline_han clone is retained unused. PhysicalGPU1 is allocated.
+
+Necessary checks are native64 asymmetric two-relation dense/sparse forward and all
+parameter/input gradients in FP32 and FP64, independent evaluation-copy immutability,
+TF1Adam and native stopping rules, and a complete64-width MAG update/validation/replay.
+The first formal ACM default run trains under its full native budget, then must pass
+fresh-object and independent-process score replay before the matrix continues.
+All artifacts stay under this method exp/log, excluded from Git. No paper edits.

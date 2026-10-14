@@ -2,15 +2,46 @@
   "schema_version": 1,
   "method": "HAN",
   "base": "/home/chenzhichao/miniconda3/envs/coe",
-  "resolved_environment": "coe_baseline_han",
+  "resolved_environment": "coe",
   "python": "3.10.21",
   "framework": "PyTorch equivalent port of official HeteGAT_multi",
   "pip_phases": [],
-  "required_versions": {"torch": "2.1.1+cu121", "dgl": "2.4.0+cu121", "numpy": "1.26.4", "scipy": "1.15.3"},
-  "env": {"CUDA_VISIBLE_DEVICES": "1", "OMP_NUM_THREADS": "2", "MKL_NUM_THREADS": "2", "OPENBLAS_NUM_THREADS": "2", "PYTHONUNBUFFERED": "1", "PYTHONPATH": "/home/chenzhichao/Research/other_exp"},
-  "resource": {"gpus": 1, "physical_gpu": 1, "cpu_threads": 2},
-  "clone_trigger": "coe TensorFlow import failed: ModuleNotFoundError: No module named 'tensorflow'; official ex_acm3025 requires TF1 tf.layers/tf.contrib",
-  "smoke": {"import_names": ["torch", "dgl", "numpy", "scipy"], "gpu_tests": [{"cmd": "python reproduce/checks.py --device cuda:0", "expect": "HAN_CHECKS_PASSED"}]},
+  "required_versions": {
+    "torch": "2.1.1+cu121",
+    "dgl": "2.4.0+cu121",
+    "numpy": "1.26.4",
+    "scipy": "1.15.3"
+  },
+  "env": {
+    "CUDA_VISIBLE_DEVICES": "1",
+    "OMP_NUM_THREADS": "2",
+    "MKL_NUM_THREADS": "2",
+    "OPENBLAS_NUM_THREADS": "2",
+    "PYTHONUNBUFFERED": "1",
+    "PYTHONPATH": "/home/chenzhichao/Research/other_exp"
+  },
+  "resource": {
+    "gpus": 1,
+    "physical_gpu": 1,
+    "cpu_threads": 2
+  },
+  "clone_trigger": "Historicalclone followed TF1import failure; current PyTorch/DGL port checked in originalcoe and directly usescoe as userrequested",
+  "smoke": {
+    "import_names": [
+      "torch",
+      "dgl",
+      "numpy",
+      "scipy"
+    ],
+    "gpu_tests": [
+      {
+        "cmd": "python -m reproduce.checks --device cuda:0",
+        "expect": "HAN_CHECKS_PASSED"
+      }
+    ]
+  },
   "weight_dirs": {},
-  "run_commands": []
+  "run_commands": [],
+  "training_dtype": "float32",
+  "evaluation_dtype": "float64"
 }

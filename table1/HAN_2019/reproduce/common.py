@@ -9,12 +9,12 @@ from reproduce.han_model import HAN, graph_from_adjacency
 
 METHOD_DIR = Path(__file__).resolve().parents[1]
 DATASETS = ("acm","dblp","yelp","amazon","mag")
-SEARCH = METHOD_DIR / "configs/search_space.json"
+DEFAULT = METHOD_DIR / "configs/default.json"
 
 
 def core_files():
     files = list((METHOD_DIR / "reproduce").glob("*.py"))
-    files += list((METHOD_DIR / "configs").glob("*.json"))
+    files += [DEFAULT]
     files += [METHOD_DIR / "environment/env_spec.json"]
     files += [METHOD_DIR / "ADAPTATION.md", METHOD_DIR / "REPRODUCE.md", METHOD_DIR / "sources.json",
               METHOD_DIR / "environment/README.md"]
@@ -25,10 +25,19 @@ def core_files():
 
 def registered_config(path):
     value = json.loads(Path(path).read_text())
-    config = value["config"] if "config" in value else value
-    candidates = json.loads(SEARCH.read_text())["candidates"]
-    if config not in candidates:
-        raise ValueError("Config is not one of the pre-registered 12 complete candidates")
+    default=json.loads(DEFAULT.read_text())
+    if value != default or default["comparison_policy"]!="author_defaults_no_hpo_v1":
+        raise ValueError("Only complete fixed author default specification allowed; noHPO configs")
+    author=json.loads((METHOD_DIR/"sources.json").read_text())
+    if (default["config_source"]["commit"]!=author["code_commit"]
+            or default["config_source"]["repository"]!=author["code_url"]):
+        raise ValueError("Default configuration provenance differs from officialsources.json")
+    config=default["config"]
+    if any(config[key]!=value for key,value in {
+        "width":64,"heads":8,"semantic_attention_size":128,"learning_rate":.005,
+        "l2_coefficient":.001,"feature_dropout":.6,"attention_dropout":.6,
+        "epochs":200,"patience_checks":100,"inference_dtype":"float64"}.items()):
+        raise ValueError("Fixeddefaults/nativewidth/publicbudget were changed")
     return config
 
 
@@ -42,7 +51,7 @@ def data_and_graphs(dataset, device):
 
 
 def adaptation(data, supports):
-    return {"id": "han_official_multirelation_sparse_v1", "kind": "input_interface_adaptation",
+    return {"id": "han_official_multirelation_sparse_native64_fp64_eval_v2", "kind": "input_interface_adaptation",
         "not_ccoe_model_mechanism": True,
         "all_relations_preserved": True, "view_count": len(supports),
         "relation_support_nnz": [support._nnz() for support in supports],
@@ -51,7 +60,10 @@ def adaptation(data, supports):
         "support_rule": "positive provided edges, one self-loop; no symmetrization, edge weights unused as official bias support",
         "direction": "adjacency row=receiver,col=sender -> DGL src=col,dst=row",
         "semantic_attention": "official_HeteGAT_multi_per_node_softmax_over_all_relations",
-        "width": 256, "heads": 8, "head_width": 32,
+        "width": 64, "heads": 8, "head_width": 8,
+        "comparison_policy":"author_defaults_no_hpo_v1",
+        "training_dtype":"float32","validation_export_replay_dtype":"float64",
+        "evaluation_device":"same requestedGPU as training; fullgraph",
         "sparse_kernel": "DGL u_add_v / edge_softmax(dst) / u_mul_e_sum; no E*H*D message tensor",
         "determinism_limit": "DGL CUDA sparse reductions may use nondeterministic atomic reductions; fixed seeds do not imply bitwise training identity"}
 

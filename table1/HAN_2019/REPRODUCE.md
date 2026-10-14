@@ -1,75 +1,65 @@
-# HAN reproduction usage
+# Fixed-default HAN reproduction
 
-Read the root `REPRODUCTION_PROTOCOL_AND_PROMPTS.md` and `shared/README.md` first.
-Core adaptations are detailed in `ADAPTATION.md`; all Table1 relations are preserved.
-There is one method directory, five datasets, seeds1024–1028, and no author utils/model
-path injection. Canonical data roots remain their original read-only locations.
+Read root REPRODUCTION_PROTOCOL_AND_PROMPTS.md, shared/README.md and ADAPTATION.md.
+Current comparison uses released HeteGAT_multi defaults:64 width, eight8-channel
+heads, semantic128, lr.005, L2.001, both dropouts.6, **200epochs/patience100**.
+Native inclusive validation-Acc-or-CE stopping is preserved; selected checkpoint
+still follows strict validation Acc improvement with earliest tie. No HPO.
 
-Set the method cwd and namespace/environment once:
+Run from the unique method directory, using original coe without installing packages:
 
 ```bash
 cd /home/chenzhichao/Research/other_exp/table1/HAN_2019
 export PYTHONPATH=/home/chenzhichao/Research/other_exp
-export CUDA_VISIBLE_DEVICES=1 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 PYTHONUNBUFFERED=1
+export CUDA_VISIBLE_DEVICES=1 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+/home/chenzhichao/miniconda3/envs/coe/bin/python -m reproduce.checks --device cuda:0
 ```
 
-Sparse dense-formula/gradient validation:
+Single full formal task using the fixed authored source defaults:
 
 ```bash
-/home/chenzhichao/miniconda3/envs/coe_baseline_han/bin/python -m reproduce.checks --device cuda:0
+/home/chenzhichao/miniconda3/envs/coe/bin/python -m reproduce.run --dataset acm --seed 1024 --device cuda:0 --phase formal --run-id formal_unique_id --config configs/default.json
 ```
 
-Single validation-only development task (400 epochs, no test evaluation):
+New matrix; use a fresh batch ID, preserve all older failed exp/log:
 
 ```bash
-/home/chenzhichao/miniconda3/envs/coe_baseline_han/bin/python -m reproduce.run --dataset acm --seed 1024 --device cuda:0 --phase dev --run-id dev_unique_id --candidate 0
+/home/chenzhichao/miniconda3/envs/coe/bin/python -u -m reproduce.run_matrix --run-id han_defaults_unique_id --devices cuda:0 --phase formal --seeds 1024 1025 1026 1027 1028
 ```
 
-Full background matrix entrypoint, use a new batch ID:
+Matrix executes25 formal jobs, no development candidates. Each seed starts from
+fresh initialization, saves validation-selected best, exports FP64 full-node logits,
+and performs a fresh-object then independent-process score replay. The first complete
+ACM seed1024 is a regression gate; only after its full training/replay succeeds does
+the queue continue the remaining24. It never averages scores or modifies the paper.
+
+FP32 training and FP64 GPU validation/export/replay retain all graph edges and model
+operations. This repairs real FP32 sparse rounding errors without changing the public
+1e-6 score assertion, rounding logits, or casting canonical features in place.
+No author directory is added to sys.path; only the method namespace and shared root.
+
+Independent replay and explicit later user-triggered statistics:
 
 ```bash
-/home/chenzhichao/miniconda3/envs/coe_baseline_han/bin/python -u -m reproduce.run_matrix --run-id han_unique_batch --devices cuda:0 --phase formal --seeds 1024 1025 1026 1027 1028
+/home/chenzhichao/miniconda3/envs/coe/bin/python -m reproduce.replay --job-dir exp/formal_han_defaults_unique_id/acm/seed1024 --device cuda:0
+/home/chenzhichao/miniconda3/envs/coe/bin/python -m reproduce.summarize --run-root exp/formal_han_defaults_unique_id --datasets acm dblp yelp amazon mag
 ```
 
-The matrix executes 12 pre-registered candidates per dataset using only validation,
-freezes the chosen config into `exp/formal_<batch>/frozen_configs/<dataset>.json`, then
-starts each of its five formal seeds from fresh initialization. Total60 dev jobs+25
-formal jobs; all stages sequential on physicalGPU1. No automatic final statistics,
-LaTeX generation or paper edits. A task failure writes `FAILED.json` and preserves
-its logs; it never silently substitutes a smaller graph or omits a candidate/seed.
-An existing batch ID is rejected; resumed/manual retry policy must preserve old failures
-and use mathematically identical seed/config. Controller source lock rejects edits
-to any method/shared core file during the batch.
+Summary requires all five exact seeds with matched code/config/data/source/precision
+and replay; sample std uses ddof1. The matrix does not call summary automatically.
 
-Independent checkpoint replay (works only with unchanged frozen sources):
+## Persistent monitoring
 
-```bash
-/home/chenzhichao/miniconda3/envs/coe_baseline_han/bin/python -m reproduce.replay --job-dir exp/formal_han_unique_batch/acm/seed1024 --device cuda:0
-```
+Launch the matrix in detached tmux, redirect stdout/stderr to
+log/formal_<batch>/console.log. Task logs are
+log/formal_<batch>/tasks/formal_<dataset>_seed<seed>.log and replay_<dataset>_seed<seed>.log.
+Each job also writes log/<run_id>/<dataset>/seed<seed>/console.log and exp/.../training.jsonl.
+Stable state: exp/formal_<batch>/status.json (also progress.json).
+Initial complete-ACM gate marker: ACM_REPLAY_GATE_PASSED.json.
+Final markers: COMPLETED.json (awaiting user summary), or FAILED.json.
+Failures preserve full evidence and stop; there is no smaller-graph fallback.
 
-Explicit later five-seed summary, only after the user requests statistics:
-
-```bash
-/home/chenzhichao/miniconda3/envs/coe_baseline_han/bin/python -m reproduce.summarize --run-root exp/formal_han_unique_batch --datasets acm dblp yelp amazon mag
-```
-
-Strict shared aggregation checks all five seeds, source/config/data identities,
-and replay; sample standard deviation uses ddof1. This command produces JSON/CSV
-and candidate table rows; it does not modify the paper.
-
-## Monitoring and outputs
-
-- Master controller stdout goes to `log/formal_<batch>/console.log` via launcher.
-- Every subprocess has `log/formal_<batch>/tasks/dev_<dataset>_cNN.log`,
-  `formal_<dataset>_seedNNNN.log`, or `replay_<dataset>_seedNNNN.log`.
-- Each training job also writes its exact protocol path
-  `log/<run_id>/<dataset>/seedNNNN/console.log` and `exp/.../training.jsonl`.
-- `exp/formal_<batch>/status.json` (also `progress.json`) always identifies current task and counts.
-- End markers: `COMPLETED.json` (awaiting user summary), or `FAILED.json`.
-- Weights, source snapshots, predictions, HPO evidence and logs remain in method exp/log
-  and are excluded from Git; only core code/config/docs/environment provenance are tracked.
-
-`--output-root` must be exactly this method's `exp`; other locations are rejected.
-Formal single tasks require the full valid frozen12-trial evidence. Smoke accepts
-`--smoke-epochs`, while dev/formal reject shortened budgets. Test labels are only read
-in final export/evaluation, never for loss, checkpoints or HPO choices.
+Source lock refuses changes during the formal matrix. output-root must stay in this
+method exp. Config is always the complete fixed default specification; arbitrary
+candidate/HPO config and dev phase are rejected. Short budgets are allowed only for
+explicit smoke jobs. Old HPO queue failed and is not mixed into current results.

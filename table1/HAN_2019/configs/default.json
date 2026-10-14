@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "method": "HAN",
+  "comparison_policy": "author_defaults_no_hpo_v1",
+  "config_source": {
+    "repository": "https://github.com/Jhy1993/HAN",
+    "commit": "71bac29a07fb8fab908d50a806a7bc38aa6c6611",
+    "entrypoint": "code/ex_acm3025.py",
+    "variant": "HeteGAT_multi",
+    "default_lines": "22-35:lr=.005,l2=.001,hid_units=[8],n_heads=[8,1];training feed:attn_drop=.6,ffd_drop=.6",
+    "original_epochs": 200,
+    "original_patience": 100,
+    "inference_precision_reason": "DGL float32 atomic sparse reduction caused1.91e-6 replay-score error; identical formula evaluated infloat64 retains original shared1e-6 assertion",
+    "stopping_override": "Retain official200epochs/patience100/inclusive ACC-or-CE early stop; only checkpoint choice follows shared strictACC earliest tie"
+  },
+  "config": {
+    "width": 64,
+    "heads": 8,
+    "semantic_attention_size": 128,
+    "feature_dropout": 0.6,
+    "attention_dropout": 0.6,
+    "learning_rate": 0.005,
+    "l2_coefficient": 0.001,
+    "adam_epsilon": 1e-08,
+    "epochs": 200,
+    "patience_checks": 100,
+    "eval_every": 1,
+    "residual": false,
+    "activation": "elu",
+    "negative_slope": 0.2,
+    "framework_variant": "official_HeteGAT_multi",
+    "train_labels": "all_outer_train",
+    "selection": "validation_accuracy_strict_improvement_earliest_tie",
+    "optimizer": "tf1_adam_equivalent",
+    "comparison_policy": "author_defaults_no_hpo_v1",
+    "training_dtype": "float32",
+    "inference_dtype": "float64",
+    "inference_device_policy": "same_physical_gpu_as_training",
+    "score_replay_atol": 1e-06,
+    "early_stopping_rule": "official_inclusive_valacc_or_valce_progress_resets_patience"
+  }
+}

@@ -8,6 +8,7 @@ if __package__ in (None, ""):
 import torch
 from shared.coe_benchmark import load_best, verify_model_replay, seed_everything
 from reproduce.common import METHOD_DIR,reconstruct
+from reproduce.inference import StableInference
 
 
 def main():
@@ -22,8 +23,8 @@ def main():
     best=load_best(job/"best.pt")
     if best["payload"]["config_sha256"] != manifest["config_sha256"]:
         raise ValueError("Checkpoint configuration mismatch")
-    model.load_state_dict(best["payload"]["model_state"],strict=True);model.eval()
-    with torch.no_grad(): logits=model(features,graphs).cpu()
+    model.load_state_dict(best["payload"]["model_state"],strict=True)
+    logits=StableInference(model,features,graphs)(model).cpu()
     replay=verify_model_replay(job,node_ids=data.node_ids,predictions=logits.argmax(-1),scores=logits)
     print(json.dumps({"event":"checkpoint_replay",**replay}),flush=True)
 

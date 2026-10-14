@@ -83,8 +83,8 @@ class HAN(nn.Module):
     def __init__(self, input_dims, classes, config):
         super().__init__()
         heads, width = int(config["heads"]), int(config["width"])
-        if width % heads or width != 256 or heads != 8:
-            raise ValueError("Registered primary architecture is eight heads x32 =256")
+        if width % heads or width not in (64,256) or heads != 8:
+            raise ValueError("Eight heads required; current primary default is8x8=64 (256 only for preserved failed-run diagnostics)")
         self.relations = nn.ModuleList([
             nn.ModuleList([OfficialAttentionHead(dim, width//heads,
                 config["feature_dropout"], config["attention_dropout"]) for _ in range(heads)])
