@@ -1,0 +1,18 @@
+{
+  "method": "UVF",
+  "year": 2026,
+  "title": "Uncertainty-Guided View-Strength-Aware Feature Utilization for Multi-View Classification",
+  "tables": [
+    3
+  ],
+  "directory": "table3/UVF_2026",
+  "pdf_url": "https://ojs.aaai.org/index.php/AAAI/article/download/39599/43560",
+  "code_url": "https://github.com/lvli-rise/UVF",
+  "retrieved_at": "2026-10-14T02:55:10.670843+00:00",
+  "pdf_status": "ok",
+  "pdf_bytes": 703946,
+  "pdf_sha256": "656f080c9292ebf47b268c5538905f6f3f801fec06e0af07e4d8db19e9038f6e",
+  "code_status": "ok",
+  "code_commit": "fa857c4c2c59fac0a4d9c5c2eac3fb2b48e9c6da",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

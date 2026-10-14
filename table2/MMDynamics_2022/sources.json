@@ -1,0 +1,19 @@
+{
+  "method": "MMDynamics",
+  "year": 2022,
+  "title": "Multimodal Dynamics: Dynamical Fusion for Trustworthy Multimodal Classification",
+  "tables": [
+    2
+  ],
+  "directory": "table2/MMDynamics_2022",
+  "pdf_url": "https://openaccess.thecvf.com/content/CVPR2022/papers/Han_Multimodal_Dynamics_Dynamical_Fusion_for_Trustworthy_Multimodal_Classification_CVPR_2022_paper.pdf",
+  "code_url": "https://github.com/TencentAILabHealthcare/mmdynamics",
+  "retrieved_at": "2026-10-14T02:54:41.241583+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 1186845,
+  "pdf_sha256": "d094ea0ed23e1ac882e07748f6e7f463c92157dce58e51b1cc30bf444939098c",
+  "code_status": "ok",
+  "code_commit": "06a2bb8a66953be77c53e6a027bc04193c5bdca4",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

@@ -1,0 +1,19 @@
+{
+  "method": "SynIB",
+  "year": 2026,
+  "title": "SynIB: Informational Bottleneck for Maximizing Synergy in Multimodal Learning",
+  "tables": [
+    2
+  ],
+  "directory": "table2/SynIB_2026",
+  "pdf_url": "https://arxiv.org/pdf/2606.09853",
+  "code_url": "https://github.com/kkontras/SynIB",
+  "retrieved_at": "2026-10-14T02:54:58.987671+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 6058743,
+  "pdf_sha256": "dde3aa2e45f7624054b81295e6ce515cc8f8c92d9a113526475f85a8084f2a8b",
+  "code_status": "ok",
+  "code_commit": "3f3d3b86b7487a51175fe362e3b911ddd4c06e16",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

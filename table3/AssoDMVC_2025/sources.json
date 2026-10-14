@@ -1,0 +1,19 @@
+{
+  "method": "AssoDMVC",
+  "year": 2025,
+  "title": "View-Association-Guided Dynamic Multi-View Classification",
+  "tables": [
+    3
+  ],
+  "directory": "table3/AssoDMVC_2025",
+  "pdf_url": "https://www.ijcai.org/proceedings/2025/0632.pdf",
+  "code_url": "https://github.com/lvli-rise/AssoDMVC",
+  "retrieved_at": "2026-10-14T02:55:13.757647+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 464264,
+  "pdf_sha256": "894025627d976dccf0f669e21b0d0723ab462125e9d057044a08b6bd220e65d8",
+  "code_status": "ok",
+  "code_commit": "072c431ad6b3967cb07e8873e50f7492b0982c4a",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

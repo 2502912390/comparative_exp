@@ -1,0 +1,20 @@
+{
+  "method": "LMF",
+  "year": 2018,
+  "title": "Efficient Low-rank Multimodal Fusion With Modality-Specific Factors",
+  "tables": [
+    2,
+    3
+  ],
+  "directory": "table2/LMF_2018",
+  "pdf_url": "https://aclanthology.org/P18-1209.pdf",
+  "code_url": "https://github.com/Justin1904/Low-rank-Multimodal-Fusion",
+  "retrieved_at": "2026-10-14T02:55:06.445319+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 473656,
+  "pdf_sha256": "936528dc2408283592411da77098c04e407be7ad0748193aa73f732d9f8644bc",
+  "code_status": "ok",
+  "code_commit": "ea4755124d19bddf7941695215e98f16fbb1fff9",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

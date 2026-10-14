@@ -1,0 +1,19 @@
+{
+  "method": "TUNED",
+  "year": 2025,
+  "title": "Trusted Unified Feature-Neighborhood Dynamics for Multi-View Classification",
+  "tables": [
+    3
+  ],
+  "directory": "table3/TUNED_2025",
+  "pdf_url": "https://ojs.aaai.org/index.php/AAAI/article/download/33914/36069",
+  "code_url": "https://github.com/JethroJames/TUNED",
+  "retrieved_at": "2026-10-14T02:55:12.690575+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 4396034,
+  "pdf_sha256": "83f0eb8a4efb91920dbe2eac26387246419dc325a3391177833835140067464d",
+  "code_status": "ok",
+  "code_commit": "6079196e302e39bf6d0e6c604edd0108f284f8c6",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

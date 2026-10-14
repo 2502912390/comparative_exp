@@ -1,0 +1,15 @@
+in_dim: 128
+hid_dim: 64
+out_dim: 8
+relation_types: [0, 1, 2]
+spaces: ['Euclidean', 'Hyperbolic']
+num_layers: 2
+num_kernels: 64
+dropout: 0.5
+manifold_params:
+  Euclidean:
+    init_k: 1.0
+    sigma: 1.0
+  Hyperbolic:
+    init_k: 1.0
+    sigma: 1.0

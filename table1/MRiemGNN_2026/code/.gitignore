@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Environments
+.env
+.venv/
+venv/
+env/
+
+# Data and experiment artifacts
+data/
+external/
+runs/
+*.mat
+*.pt
+*.pth
+*.ckpt
+*.npz
+*.npy
+
+# Logs and temporary files
+*.log
+tmp/
+temp/

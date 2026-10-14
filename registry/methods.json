@@ -1,0 +1,597 @@
+{
+  "schema_version": 1,
+  "protocol_id": "coe1005_fixedsplit_v1",
+  "methods": [
+    {
+      "method": "DMG",
+      "year": 2023,
+      "title": "Disentangled Multiplex Graph Representation Learning",
+      "tables": [
+        1
+      ],
+      "directory": "table1/DMG_2023",
+      "pdf_url": "https://proceedings.mlr.press/v202/mo23a/mo23a.pdf",
+      "code_url": "https://github.com/YujieMo/DMG",
+      "retrieved_at": "2026-10-14T02:54:31.071376+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 936562,
+      "pdf_sha256": "54be0550fdc943ac626bbbb471432a38b69a94938da54c4c7914c368a2214229",
+      "code_status": "ok",
+      "code_commit": "8fa72540667fbe2e5945bec937afabd04100be86",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "acm",
+        "dblp",
+        "yelp",
+        "amazon",
+        "mag"
+      ],
+      "planned_formal_jobs": 25,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "GCN",
+      "year": 2017,
+      "title": "Semi-Supervised Classification with Graph Convolutional Networks",
+      "tables": [
+        1
+      ],
+      "directory": "table1/GCN_2017",
+      "pdf_url": "https://arxiv.org/pdf/1609.02907",
+      "code_url": "https://github.com/tkipf/gcn",
+      "retrieved_at": "2026-10-14T02:54:24.790404+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 873897,
+      "pdf_sha256": "a654f884db04a317b0f2414a83f2ba32a9f8442d29bcf1cb5f73f7af78a98070",
+      "code_status": "ok",
+      "code_commit": "39a4089fe72ad9f055ed6fdb9746abdcfebc4d81",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "acm",
+        "dblp",
+        "yelp",
+        "amazon",
+        "mag"
+      ],
+      "planned_formal_jobs": 25,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "HAN",
+      "year": 2019,
+      "title": "Heterogeneous Graph Attention Network",
+      "tables": [
+        1
+      ],
+      "directory": "table1/HAN_2019",
+      "pdf_url": "https://arxiv.org/pdf/1903.07293",
+      "code_url": "https://github.com/Jhy1993/HAN",
+      "retrieved_at": "2026-10-14T02:54:24.792499+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 2742786,
+      "pdf_sha256": "b79abd5f4462d4dea9b2e8c1abf942f6a792b256b14e80ac7e6e775eb92b9c1e",
+      "code_status": "ok",
+      "code_commit": "71bac29a07fb8fab908d50a806a7bc38aa6c6611",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "acm",
+        "dblp",
+        "yelp",
+        "amazon",
+        "mag"
+      ],
+      "planned_formal_jobs": 25,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "HDMI",
+      "year": 2021,
+      "title": "HDMI: High-order Deep Multiplex Infomax",
+      "tables": [
+        1
+      ],
+      "directory": "table1/HDMI_2021",
+      "pdf_url": "https://arxiv.org/pdf/2102.07810",
+      "code_url": "https://github.com/baoyujing/HDMI",
+      "retrieved_at": "2026-10-14T02:54:24.793756+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 1447876,
+      "pdf_sha256": "cd3c683f0d277aa5c3edc887e998f2d65496757f8a162350587bef7b20d5e43d",
+      "code_status": "ok",
+      "code_commit": "00b1bbdf37a530e2ec5e1e836f25eb25ef1cd94e",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "acm",
+        "dblp",
+        "yelp",
+        "amazon",
+        "mag"
+      ],
+      "planned_formal_jobs": 25,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "InfoMGF",
+      "year": 2024,
+      "title": "Beyond Redundancy: Information-aware Unsupervised Multiplex Graph Structure Learning",
+      "tables": [
+        1,
+        2
+      ],
+      "directory": "table1/InfoMGF_2024",
+      "pdf_url": "https://arxiv.org/pdf/2409.17386",
+      "code_url": "https://github.com/zxlearningdeep/InfoMGF",
+      "retrieved_at": "2026-10-14T02:54:35.280494+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 4515848,
+      "pdf_sha256": "c158256e0c837e97b98b3fd5a5d342582a6938a82a9a7e47ddbf2abcc1ba4245",
+      "code_status": "ok",
+      "code_commit": "27962685731a7cde96fb839c3fcf1b45e6cfca2f",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "acm",
+        "dblp",
+        "yelp",
+        "amazon",
+        "mag",
+        "esp",
+        "flickr",
+        "iapr",
+        "nus"
+      ],
+      "planned_formal_jobs": 45,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "MRiemGNN",
+      "year": 2026,
+      "title": "Multiplex Heterogeneous Graph Neural Networks with Euclidean-Riemannian Mutual Space Synergy",
+      "tables": [
+        1
+      ],
+      "directory": "table1/MRiemGNN_2026",
+      "pdf_url": "https://ojs.aaai.org/index.php/AAAI/article/download/38536/42498",
+      "code_url": "https://github.com/lx970414/MRiemGNN",
+      "retrieved_at": "2026-10-14T02:54:36.098229+00:00",
+      "pdf_status": "ok",
+      "pdf_bytes": 1336135,
+      "pdf_sha256": "3ca741aea1a9a33332587827d771b739f6f12d18c8365ffc25da830656edc99a",
+      "code_status": "ok",
+      "code_commit": "6fc9b96122c6d202516b56ade3806b1cbcb937f1",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "acm",
+        "dblp",
+        "yelp",
+        "amazon",
+        "mag"
+      ],
+      "planned_formal_jobs": 25,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "Mowst",
+      "year": 2024,
+      "title": "Mixture of Weak & Strong Experts on Graphs",
+      "tables": [
+        1
+      ],
+      "directory": "table1/Mowst_2024",
+      "pdf_url": "https://proceedings.iclr.cc/paper_files/paper/2024/file/6a8449c080c3d27e5e16995e82beaade-Paper-Conference.pdf",
+      "code_url": "https://github.com/facebookresearch/mowst-gnn",
+      "retrieved_at": "2026-10-14T02:54:39.639929+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 1270987,
+      "pdf_sha256": "3905d3a3897212ee84cc9eee4980b683e9895b7bf21f7a0073802eb638f43417",
+      "code_status": "ok",
+      "code_commit": "2e3569962d2388bfda4535cdd1fc0b6eaec88a28",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "acm",
+        "dblp",
+        "yelp",
+        "amazon",
+        "mag"
+      ],
+      "planned_formal_jobs": 25,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "MvCGE",
+      "year": 2025,
+      "title": "Where Graph Meets Heterogeneity: Multi-View Collaborative Graph Experts",
+      "tables": [
+        1
+      ],
+      "directory": "table1/MvCGE_2025",
+      "pdf_url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/7315c16422558ae81d65a812723d2cec-Paper-Conference.pdf",
+      "code_url": null,
+      "retrieved_at": "2026-10-14T02:54:35.428245+00:00",
+      "pdf_status": "ok",
+      "pdf_bytes": 4142313,
+      "pdf_sha256": "08e1831d0d6c7512d808d52469b55026c1d4879f660419c20b964d05964fc380",
+      "code_status": "not_found",
+      "code_note": "Paper PDF and venue supplement checked; supplement contains only a PDF. Paper mentions an anonymous link but supplies no usable code URL. GitHub exact-name search found no matching public author repository.",
+      "supplement_url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/7315c16422558ae81d65a812723d2cec-Supplemental-Conference.zip",
+      "supplement_sha256": "4b2c22c26497c677ce121b4c00d69516bd189c15c492a2dd5b025e08c8062039",
+      "datasets": [
+        "acm",
+        "dblp",
+        "yelp",
+        "amazon",
+        "mag"
+      ],
+      "planned_formal_jobs": 25,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "NodeFormer",
+      "year": 2022,
+      "title": "NodeFormer: A Scalable Graph Structure Learning Transformer for Node Classification",
+      "tables": [
+        1
+      ],
+      "directory": "table1/NodeFormer_2022",
+      "pdf_url": "https://proceedings.neurips.cc/paper_files/paper/2022/file/af790b7ae573771689438bbcfc5933fe-Paper-Conference.pdf",
+      "code_url": "https://github.com/qitianwu/NodeFormer",
+      "retrieved_at": "2026-10-14T02:54:24.793382+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 3246727,
+      "pdf_sha256": "c0407dee56509e118ab84995ba82fa5ad95936f251c362352829960edb81feb3",
+      "code_status": "ok",
+      "code_commit": "5390b6908326905b2eb840f65a70b0f4082aef43",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "acm",
+        "dblp",
+        "yelp",
+        "amazon",
+        "mag"
+      ],
+      "planned_formal_jobs": 25,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "ECML",
+      "year": 2024,
+      "title": "Reliable Conflictive Multi-View Learning",
+      "tables": [
+        2,
+        3
+      ],
+      "directory": "table2/ECML_2024",
+      "pdf_url": "https://ojs.aaai.org/index.php/AAAI/article/download/29546/30911",
+      "code_url": "https://github.com/jiajunsi/RCML",
+      "retrieved_at": "2026-10-14T02:54:47.759072+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 2496896,
+      "pdf_sha256": "11950d7568df4ac22ece4ea9632c3d5abcae5aabe587df3ef4324a7ef67a0657",
+      "code_status": "ok",
+      "code_commit": "c9c5ab41e6fe62a85e5f6441a4dc7b568e1fa421",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "esp",
+        "flickr",
+        "iapr",
+        "nus",
+        "mv_acm",
+        "mv_citeseer",
+        "mv_prokaryotic",
+        "mv_reuters1200",
+        "mv_wikipedia"
+      ],
+      "planned_formal_jobs": 45,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "LMF",
+      "year": 2018,
+      "title": "Efficient Low-rank Multimodal Fusion With Modality-Specific Factors",
+      "tables": [
+        2,
+        3
+      ],
+      "directory": "table2/LMF_2018",
+      "pdf_url": "https://aclanthology.org/P18-1209.pdf",
+      "code_url": "https://github.com/Justin1904/Low-rank-Multimodal-Fusion",
+      "retrieved_at": "2026-10-14T02:55:06.445319+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 473656,
+      "pdf_sha256": "936528dc2408283592411da77098c04e407be7ad0748193aa73f732d9f8644bc",
+      "code_status": "ok",
+      "code_commit": "ea4755124d19bddf7941695215e98f16fbb1fff9",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "esp",
+        "flickr",
+        "iapr",
+        "nus",
+        "mv_acm",
+        "mv_citeseer",
+        "mv_prokaryotic",
+        "mv_reuters1200",
+        "mv_wikipedia"
+      ],
+      "planned_formal_jobs": 45,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "MCR",
+      "year": 2025,
+      "title": "Balancing Multimodal Training Through Game-Theoretic Regularization",
+      "tables": [
+        2
+      ],
+      "directory": "table2/MCR_2025",
+      "pdf_url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/f5784de266e45bd09333721b0a602b61-Paper-Conference.pdf",
+      "code_url": "https://github.com/kkontras/MCR",
+      "retrieved_at": "2026-10-14T02:54:47.927599+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 3345272,
+      "pdf_sha256": "f42ed413b629a74755bbd6df7b3b1d3a08bc03bf40255fa93b9fea04ed6832d7",
+      "code_status": "ok",
+      "code_commit": "0da29d0343e1f4b0b6b90425ff9ff2f71d873b54",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "esp",
+        "flickr",
+        "iapr",
+        "nus"
+      ],
+      "planned_formal_jobs": 20,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "MMDynamics",
+      "year": 2022,
+      "title": "Multimodal Dynamics: Dynamical Fusion for Trustworthy Multimodal Classification",
+      "tables": [
+        2
+      ],
+      "directory": "table2/MMDynamics_2022",
+      "pdf_url": "https://openaccess.thecvf.com/content/CVPR2022/papers/Han_Multimodal_Dynamics_Dynamical_Fusion_for_Trustworthy_Multimodal_Classification_CVPR_2022_paper.pdf",
+      "code_url": "https://github.com/TencentAILabHealthcare/mmdynamics",
+      "retrieved_at": "2026-10-14T02:54:41.241583+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 1186845,
+      "pdf_sha256": "d094ea0ed23e1ac882e07748f6e7f463c92157dce58e51b1cc30bf444939098c",
+      "code_status": "ok",
+      "code_commit": "06a2bb8a66953be77c53e6a027bc04193c5bdca4",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "esp",
+        "flickr",
+        "iapr",
+        "nus"
+      ],
+      "planned_formal_jobs": 20,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "QMF",
+      "year": 2023,
+      "title": "Provable Dynamic Fusion for Low-Quality Multimodal Data",
+      "tables": [
+        2,
+        3
+      ],
+      "directory": "table2/QMF_2023",
+      "pdf_url": "https://proceedings.mlr.press/v202/zhang23ar/zhang23ar.pdf",
+      "code_url": "https://github.com/QingyangZhang/QMF",
+      "retrieved_at": "2026-10-14T02:54:43.490443+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 1249999,
+      "pdf_sha256": "16afd960f50983ca90e31441dd9649fa8b5359a4270bc4f6661b7987f87e6c1e",
+      "code_status": "ok",
+      "code_commit": "fe6c4c6ef7cb23f0a89594ee413d485f1854268b",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "esp",
+        "flickr",
+        "iapr",
+        "nus",
+        "mv_acm",
+        "mv_citeseer",
+        "mv_prokaryotic",
+        "mv_reuters1200",
+        "mv_wikipedia"
+      ],
+      "planned_formal_jobs": 45,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "SynIB",
+      "year": 2026,
+      "title": "SynIB: Informational Bottleneck for Maximizing Synergy in Multimodal Learning",
+      "tables": [
+        2
+      ],
+      "directory": "table2/SynIB_2026",
+      "pdf_url": "https://arxiv.org/pdf/2606.09853",
+      "code_url": "https://github.com/kkontras/SynIB",
+      "retrieved_at": "2026-10-14T02:54:58.987671+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 6058743,
+      "pdf_sha256": "dde3aa2e45f7624054b81295e6ce515cc8f8c92d9a113526475f85a8084f2a8b",
+      "code_status": "ok",
+      "code_commit": "3f3d3b86b7487a51175fe362e3b911ddd4c06e16",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "esp",
+        "flickr",
+        "iapr",
+        "nus"
+      ],
+      "planned_formal_jobs": 20,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "AssoDMVC",
+      "year": 2025,
+      "title": "View-Association-Guided Dynamic Multi-View Classification",
+      "tables": [
+        3
+      ],
+      "directory": "table3/AssoDMVC_2025",
+      "pdf_url": "https://www.ijcai.org/proceedings/2025/0632.pdf",
+      "code_url": "https://github.com/lvli-rise/AssoDMVC",
+      "retrieved_at": "2026-10-14T02:55:13.757647+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 464264,
+      "pdf_sha256": "894025627d976dccf0f669e21b0d0723ab462125e9d057044a08b6bd220e65d8",
+      "code_status": "ok",
+      "code_commit": "072c431ad6b3967cb07e8873e50f7492b0982c4a",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "mv_acm",
+        "mv_citeseer",
+        "mv_prokaryotic",
+        "mv_reuters1200",
+        "mv_wikipedia"
+      ],
+      "planned_formal_jobs": 25,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "TUNED",
+      "year": 2025,
+      "title": "Trusted Unified Feature-Neighborhood Dynamics for Multi-View Classification",
+      "tables": [
+        3
+      ],
+      "directory": "table3/TUNED_2025",
+      "pdf_url": "https://ojs.aaai.org/index.php/AAAI/article/download/33914/36069",
+      "code_url": "https://github.com/JethroJames/TUNED",
+      "retrieved_at": "2026-10-14T02:55:12.690575+00:00",
+      "pdf_transport": "download",
+      "pdf_status": "ok",
+      "pdf_bytes": 4396034,
+      "pdf_sha256": "83f0eb8a4efb91920dbe2eac26387246419dc325a3391177833835140067464d",
+      "code_status": "ok",
+      "code_commit": "6079196e302e39bf6d0e6c604edd0108f284f8c6",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "mv_acm",
+        "mv_citeseer",
+        "mv_prokaryotic",
+        "mv_reuters1200",
+        "mv_wikipedia"
+      ],
+      "planned_formal_jobs": 25,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    },
+    {
+      "method": "UVF",
+      "year": 2026,
+      "title": "Uncertainty-Guided View-Strength-Aware Feature Utilization for Multi-View Classification",
+      "tables": [
+        3
+      ],
+      "directory": "table3/UVF_2026",
+      "pdf_url": "https://ojs.aaai.org/index.php/AAAI/article/download/39599/43560",
+      "code_url": "https://github.com/lvli-rise/UVF",
+      "retrieved_at": "2026-10-14T02:55:10.670843+00:00",
+      "pdf_status": "ok",
+      "pdf_bytes": 703946,
+      "pdf_sha256": "656f080c9292ebf47b268c5538905f6f3f801fec06e0af07e4d8db19e9038f6e",
+      "code_status": "ok",
+      "code_commit": "fa857c4c2c59fac0a4d9c5c2eac3fb2b48e9c6da",
+      "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run.",
+      "datasets": [
+        "mv_acm",
+        "mv_citeseer",
+        "mv_prokaryotic",
+        "mv_reuters1200",
+        "mv_wikipedia"
+      ],
+      "planned_formal_jobs": 25,
+      "implementation_status": "not_adapted_not_run",
+      "artifact_directories": [
+        "log",
+        "exp"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "method": "HAN",
+  "year": 2019,
+  "title": "Heterogeneous Graph Attention Network",
+  "tables": [
+    1
+  ],
+  "directory": "table1/HAN_2019",
+  "pdf_url": "https://arxiv.org/pdf/1903.07293",
+  "code_url": "https://github.com/Jhy1993/HAN",
+  "retrieved_at": "2026-10-14T02:54:24.792499+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 2742786,
+  "pdf_sha256": "b79abd5f4462d4dea9b2e8c1abf942f6a792b256b14e80ac7e6e775eb92b9c1e",
+  "code_status": "ok",
+  "code_commit": "71bac29a07fb8fab908d50a806a7bc38aa6c6611",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

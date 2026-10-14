@@ -1,0 +1,19 @@
+{
+  "method": "HDMI",
+  "year": 2021,
+  "title": "HDMI: High-order Deep Multiplex Infomax",
+  "tables": [
+    1
+  ],
+  "directory": "table1/HDMI_2021",
+  "pdf_url": "https://arxiv.org/pdf/2102.07810",
+  "code_url": "https://github.com/baoyujing/HDMI",
+  "retrieved_at": "2026-10-14T02:54:24.793756+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 1447876,
+  "pdf_sha256": "cd3c683f0d277aa5c3edc887e998f2d65496757f8a162350587bef7b20d5e43d",
+  "code_status": "ok",
+  "code_commit": "00b1bbdf37a530e2ec5e1e836f25eb25ef1cd94e",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

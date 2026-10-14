@@ -1,0 +1,59 @@
+# Only core implementation, configuration, provenance, and documentation.
+*
+!*/
+!.gitignore
+!*.py
+!*.pyi
+!*.c
+!*.cc
+!*.cpp
+!*.h
+!*.hpp
+!*.cu
+!*.cuh
+!*.sh
+!*.ps1
+!*.bat
+!*.yaml
+!*.yml
+!*.toml
+!*.ini
+!*.cfg
+!*.json
+!*.md
+!*.rst
+!requirements*.txt
+!LICENSE*
+!LICENCE*
+!COPYING*
+!NOTICE*
+!README*
+# Runtime outputs remain in method-local log/exp folders.
+**/log/**
+**/logs/**
+**/exp/**
+**/experiments/**
+**/checkpoints/**
+**/checkpoint/**
+**/saved_model/**
+**/saved_models/**
+**/runs/**
+**/wandb/**
+**/cache/**
+**/.cache/**
+**/__pycache__/**
+**/.pytest_cache/**
+**/.mypy_cache/**
+**/.venv/**
+**/venv/**
+**/envs/**
+**/.git/**
+/.upstream_git/**
+# Author-provided dataset manifests/labels are not core configuration.
+**/data/**/*.json
+**/datasets/**/*.json
+**/Dataset/**/*.json
+**/Datasets/**/*.json
+# Paper assets, model blobs, datasets, figures, and logs are excluded by
+# the allowlist, including PDF, MAT, NPZ/NPY, PT/PTH/PKL, PNG, CSV, JSONL.
+

@@ -1,0 +1,19 @@
+{
+  "method": "DMG",
+  "year": 2023,
+  "title": "Disentangled Multiplex Graph Representation Learning",
+  "tables": [
+    1
+  ],
+  "directory": "table1/DMG_2023",
+  "pdf_url": "https://proceedings.mlr.press/v202/mo23a/mo23a.pdf",
+  "code_url": "https://github.com/YujieMo/DMG",
+  "retrieved_at": "2026-10-14T02:54:31.071376+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 936562,
+  "pdf_sha256": "54be0550fdc943ac626bbbb471432a38b69a94938da54c4c7914c368a2214229",
+  "code_status": "ok",
+  "code_commit": "8fa72540667fbe2e5945bec937afabd04100be86",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

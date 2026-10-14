@@ -1,0 +1,19 @@
+{
+  "method": "NodeFormer",
+  "year": 2022,
+  "title": "NodeFormer: A Scalable Graph Structure Learning Transformer for Node Classification",
+  "tables": [
+    1
+  ],
+  "directory": "table1/NodeFormer_2022",
+  "pdf_url": "https://proceedings.neurips.cc/paper_files/paper/2022/file/af790b7ae573771689438bbcfc5933fe-Paper-Conference.pdf",
+  "code_url": "https://github.com/qitianwu/NodeFormer",
+  "retrieved_at": "2026-10-14T02:54:24.793382+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 3246727,
+  "pdf_sha256": "c0407dee56509e118ab84995ba82fa5ad95936f251c362352829960edb81feb3",
+  "code_status": "ok",
+  "code_commit": "5390b6908326905b2eb840f65a70b0f4082aef43",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

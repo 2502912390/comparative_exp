@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-14",
+  "executor": "current Codex session; no subagents",
+  "python": "3.10.21",
+  "python_path": "/home/chenzhichao/miniconda3/envs/coe/bin/python",
+  "torch": "2.1.1+cu121",
+  "torch_cuda": "12.1",
+  "dgl": "2.4.0+cu121",
+  "numpy": "1.26.4",
+  "scipy": "1.15.3",
+  "scikit_learn": "1.5.2",
+  "missing_imports": [
+    "tensorflow",
+    "torch_geometric",
+    "torch_sparse",
+    "torch_scatter"
+  ],
+  "host_cuda_available": true,
+  "host_cuda_device_count": 8,
+  "scope": "Core environment import checks only; no method training or dependency installation. Missing imports are not method-specific smoke-test verdicts."
+}

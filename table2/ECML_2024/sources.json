@@ -1,0 +1,20 @@
+{
+  "method": "ECML",
+  "year": 2024,
+  "title": "Reliable Conflictive Multi-View Learning",
+  "tables": [
+    2,
+    3
+  ],
+  "directory": "table2/ECML_2024",
+  "pdf_url": "https://ojs.aaai.org/index.php/AAAI/article/download/29546/30911",
+  "code_url": "https://github.com/jiajunsi/RCML",
+  "retrieved_at": "2026-10-14T02:54:47.759072+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 2496896,
+  "pdf_sha256": "11950d7568df4ac22ece4ea9632c3d5abcae5aabe587df3ef4324a7ef67a0657",
+  "code_status": "ok",
+  "code_commit": "c9c5ab41e6fe62a85e5f6441a4dc7b568e1fa421",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

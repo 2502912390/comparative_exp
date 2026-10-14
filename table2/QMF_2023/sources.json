@@ -1,0 +1,20 @@
+{
+  "method": "QMF",
+  "year": 2023,
+  "title": "Provable Dynamic Fusion for Low-Quality Multimodal Data",
+  "tables": [
+    2,
+    3
+  ],
+  "directory": "table2/QMF_2023",
+  "pdf_url": "https://proceedings.mlr.press/v202/zhang23ar/zhang23ar.pdf",
+  "code_url": "https://github.com/QingyangZhang/QMF",
+  "retrieved_at": "2026-10-14T02:54:43.490443+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 1249999,
+  "pdf_sha256": "16afd960f50983ca90e31441dd9649fa8b5359a4270bc4f6661b7987f87e6c1e",
+  "code_status": "ok",
+  "code_commit": "fe6c4c6ef7cb23f0a89594ee413d485f1854268b",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

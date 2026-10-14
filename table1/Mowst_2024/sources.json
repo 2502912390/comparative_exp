@@ -1,0 +1,19 @@
+{
+  "method": "Mowst",
+  "year": 2024,
+  "title": "Mixture of Weak & Strong Experts on Graphs",
+  "tables": [
+    1
+  ],
+  "directory": "table1/Mowst_2024",
+  "pdf_url": "https://proceedings.iclr.cc/paper_files/paper/2024/file/6a8449c080c3d27e5e16995e82beaade-Paper-Conference.pdf",
+  "code_url": "https://github.com/facebookresearch/mowst-gnn",
+  "retrieved_at": "2026-10-14T02:54:39.639929+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 1270987,
+  "pdf_sha256": "3905d3a3897212ee84cc9eee4980b683e9895b7bf21f7a0073802eb638f43417",
+  "code_status": "ok",
+  "code_commit": "2e3569962d2388bfda4535cdd1fc0b6eaec88a28",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

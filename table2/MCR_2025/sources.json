@@ -1,0 +1,19 @@
+{
+  "method": "MCR",
+  "year": 2025,
+  "title": "Balancing Multimodal Training Through Game-Theoretic Regularization",
+  "tables": [
+    2
+  ],
+  "directory": "table2/MCR_2025",
+  "pdf_url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/f5784de266e45bd09333721b0a602b61-Paper-Conference.pdf",
+  "code_url": "https://github.com/kkontras/MCR",
+  "retrieved_at": "2026-10-14T02:54:47.927599+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 3345272,
+  "pdf_sha256": "f42ed413b629a74755bbd6df7b3b1d3a08bc03bf40255fa93b9fea04ed6832d7",
+  "code_status": "ok",
+  "code_commit": "0da29d0343e1f4b0b6b90425ff9ff2f71d873b54",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

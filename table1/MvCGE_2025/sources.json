@@ -1,0 +1,19 @@
+{
+  "method": "MvCGE",
+  "year": 2025,
+  "title": "Where Graph Meets Heterogeneity: Multi-View Collaborative Graph Experts",
+  "tables": [
+    1
+  ],
+  "directory": "table1/MvCGE_2025",
+  "pdf_url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/7315c16422558ae81d65a812723d2cec-Paper-Conference.pdf",
+  "code_url": null,
+  "retrieved_at": "2026-10-14T02:54:35.428245+00:00",
+  "pdf_status": "ok",
+  "pdf_bytes": 4142313,
+  "pdf_sha256": "08e1831d0d6c7512d808d52469b55026c1d4879f660419c20b964d05964fc380",
+  "code_status": "not_found",
+  "code_note": "Paper PDF and venue supplement checked; supplement contains only a PDF. Paper mentions an anonymous link but supplies no usable code URL. GitHub exact-name search found no matching public author repository.",
+  "supplement_url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/7315c16422558ae81d65a812723d2cec-Supplemental-Conference.zip",
+  "supplement_sha256": "4b2c22c26497c677ce121b4c00d69516bd189c15c492a2dd5b025e08c8062039"
+}

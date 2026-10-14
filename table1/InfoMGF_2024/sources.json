@@ -1,0 +1,20 @@
+{
+  "method": "InfoMGF",
+  "year": 2024,
+  "title": "Beyond Redundancy: Information-aware Unsupervised Multiplex Graph Structure Learning",
+  "tables": [
+    1,
+    2
+  ],
+  "directory": "table1/InfoMGF_2024",
+  "pdf_url": "https://arxiv.org/pdf/2409.17386",
+  "code_url": "https://github.com/zxlearningdeep/InfoMGF",
+  "retrieved_at": "2026-10-14T02:54:35.280494+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 4515848,
+  "pdf_sha256": "c158256e0c837e97b98b3fd5a5d342582a6938a82a9a7e47ddbf2abcc1ba4245",
+  "code_status": "ok",
+  "code_commit": "27962685731a7cde96fb839c3fcf1b45e6cfca2f",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

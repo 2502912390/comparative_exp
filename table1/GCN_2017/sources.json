@@ -1,0 +1,19 @@
+{
+  "method": "GCN",
+  "year": 2017,
+  "title": "Semi-Supervised Classification with Graph Convolutional Networks",
+  "tables": [
+    1
+  ],
+  "directory": "table1/GCN_2017",
+  "pdf_url": "https://arxiv.org/pdf/1609.02907",
+  "code_url": "https://github.com/tkipf/gcn",
+  "retrieved_at": "2026-10-14T02:54:24.790404+00:00",
+  "pdf_transport": "download",
+  "pdf_status": "ok",
+  "pdf_bytes": 873897,
+  "pdf_sha256": "a654f884db04a317b0f2414a83f2ba32a9f8442d29bcf1cb5f73f7af78a98070",
+  "code_status": "ok",
+  "code_commit": "39a4089fe72ad9f055ed6fdb9746abdcfebc4d81",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}

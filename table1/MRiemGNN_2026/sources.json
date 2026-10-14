@@ -1,0 +1,18 @@
+{
+  "method": "MRiemGNN",
+  "year": 2026,
+  "title": "Multiplex Heterogeneous Graph Neural Networks with Euclidean-Riemannian Mutual Space Synergy",
+  "tables": [
+    1
+  ],
+  "directory": "table1/MRiemGNN_2026",
+  "pdf_url": "https://ojs.aaai.org/index.php/AAAI/article/download/38536/42498",
+  "code_url": "https://github.com/lx970414/MRiemGNN",
+  "retrieved_at": "2026-10-14T02:54:36.098229+00:00",
+  "pdf_status": "ok",
+  "pdf_bytes": 1336135,
+  "pdf_sha256": "3ca741aea1a9a33332587827d771b739f6f12d18c8365ffc25da830656edc99a",
+  "code_status": "ok",
+  "code_commit": "6fc9b96122c6d202516b56ade3806b1cbcb937f1",
+  "code_note": "Shallow clone; source checked out; large Git LFS payloads remain pointers. Dependencies and training are not run."
+}
