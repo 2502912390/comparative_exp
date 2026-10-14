@@ -12,7 +12,7 @@ METHOD_DIR = Path(__file__).resolve().parents[2]
 REPO_ROOT = METHOD_DIR.parents[1]
 DATASETS = ('acm', 'dblp', 'yelp', 'amazon', 'mag')
 CONFIG_KEYS = {'hidden_dim', 'dropout', 'learning_rate', 'weight_decay', 'epochs',
-               'patience_checks', 'optimizer', 'adaptation', 'graph_operator', 'feature_processing'}
+               'early_stopping', 'early_stop_rule', 'optimizer', 'adaptation', 'graph_operator', 'feature_processing', 'configuration_policy'}
 
 
 def read_config(path):
@@ -22,9 +22,13 @@ def read_config(path):
     if (config['adaptation'] != 'relation_union' or config['optimizer'] != 'TF1Adam'
             or config['graph_operator'] != 'tkipf_utils_normalize_adj_transpose_v1'
             or config['feature_processing'] != 'canonical_unchanged'
-            or config['hidden_dim'] != 256 or not 0 <= config['dropout'] < 1
+            or config['hidden_dim'] != 16 or not 0 <= config['dropout'] < 1
             or config['learning_rate'] <= 0 or config['weight_decay'] < 0
-            or config['epochs'] <= 0 or config['patience_checks'] < 0):
+            or config['configuration_policy'] != 'author_defaults_no_hpo_v1'
+            or config['learning_rate'] != 0.01 or config['weight_decay'] != 0.0005
+            or config['dropout'] != 0.5 or config['epochs'] <= 0 or config['epochs'] > 200
+            or config['early_stopping'] != 10
+            or config['early_stop_rule'] != 'official_zero_based_validation_loss_moving_mean'):
         raise ValueError('Config violates the frozen GCN adaptation')
     return config
 

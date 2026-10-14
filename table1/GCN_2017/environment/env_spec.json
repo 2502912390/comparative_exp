@@ -1,6 +1,6 @@
 {
-  "base": "clone /home/chenzhichao/miniconda3/envs/coe (Python3.10.21 torch2.1.1+cu121)",
-  "environment_name": "coe_baseline_gcn",
+  "base": "existing /home/chenzhichao/miniconda3/envs/coe (Python3.10.21 torch2.1.1+cu121)",
+  "environment_name": "coe",
   "system_pkgs": [
     "git",
     "tmux"
@@ -41,6 +41,6 @@
       "nvidia-smi"
     ]
   },
-  "clone_trigger_required": "Recorded coe official tensorflow and GCN models import failures",
-  "framework": "PyTorch formula-preserving port; no dependency installations"
+  "framework": "PyTorch formula-preserving port; no dependency installations",
+  "reuse_policy": "PyTorch port dependencies and native16 kernel verified in coe; no package or base environment mutation"
 }

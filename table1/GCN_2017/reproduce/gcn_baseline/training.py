@@ -11,7 +11,7 @@ from shared.coe_benchmark import (
 )
 from .common import (METHOD_DIR, DATASETS, prepare, make_model, core_files,
                      read_config, configure_runtime, assert_source_snapshot)
-from .model import TF1Adam
+from .model import TF1Adam, author_early_stop
 
 
 def log_event(event, **fields):
@@ -21,8 +21,9 @@ def log_event(event, **fields):
 def execute(args, paths):
     started = time.monotonic()
     config = read_config(args.config)
-    if args.phase == 'formal' and (config['epochs'] != 400 or config['patience_checks'] != 200):
-        raise ValueError('Formal budget must be the frozen 400/200 protocol')
+    if args.phase == 'formal' and (config != read_config(METHOD_DIR / 'configs/default.json')
+                                  or config['epochs'] != 200 or config['early_stopping'] != 10):
+        raise ValueError('Formal configuration must exactly equal the fixed author default configuration')
     seed_everything(args.seed)
     data, features, support, labels, masks, adaptation = prepare(args.dataset, args.device)
     model = make_model(config, data, args.device)
@@ -34,7 +35,7 @@ def execute(args, paths):
                               source_files=core_files(), adaptation=adaptation,
                               parameter_count=sum(p.numel() for p in model.parameters()),
                               device=args.device, author_commit=source['code_commit'])
-    selection = BestCheckpoint(paths.exp / 'best.pt', config['patience_checks'])
+    selection = BestCheckpoint(paths.exp / 'best.pt', patience_checks=0)
     if torch.cuda.is_available() and str(args.device).startswith('cuda'):
         torch.cuda.reset_peak_memory_stats()
     log_event('training_started', dataset=args.dataset, seed=args.seed, phase=args.phase,
@@ -43,6 +44,8 @@ def execute(args, paths):
               gpu_name=torch.cuda.get_device_name() if features.is_cuda else None,
               source_sha256=manifest['sources']['sha256'])
     train_start = time.monotonic()
+    validation_losses = []
+    stop_reason = 'author_max_epochs'
     with (paths.exp / 'training.jsonl').open('w') as history:
         for epoch in range(1, config['epochs'] + 1):
             epoch_start = time.monotonic()
@@ -59,6 +62,9 @@ def execute(args, paths):
             model.eval()
             with torch.no_grad():
                 validation_logits = model(features, support)
+                val_loss = float(model.loss(validation_logits, labels, masks['val'], config['weight_decay']))
+                if not torch.isfinite(torch.tensor(val_loss)):
+                    raise FloatingPointError('Nonfinite validation objective')
                 val_acc = float((validation_logits[masks['val']].argmax(-1) == labels[masks['val']]).float().mean())
                 train_acc = float((validation_logits[masks['train']].argmax(-1) == labels[masks['train']]).float().mean())
             saved = selection.consider(epoch, val_acc, {
@@ -66,15 +72,21 @@ def execute(args, paths):
                 'config_sha256': manifest['config_sha256'],
                 'sources_sha256': manifest['sources']['sha256'],
             })
-            event = dict(epoch=epoch, train_loss=float(loss.detach()), train_acc=train_acc,
+            validation_losses.append(val_loss)
+            stopped = author_early_stop(validation_losses, epoch - 1, config['early_stopping'])
+            event = dict(epoch=epoch, official_epoch_index=epoch-1, validation_loss=val_loss,
+                         author_early_stop=stopped, train_loss=float(loss.detach()), train_acc=train_acc,
                          validation_acc=val_acc, checkpoint_saved=saved,
                          best_validation_acc=selection.best_acc, best_epoch=selection.best_epoch,
                          bad_checks=selection.bad_checks, seconds=time.monotonic()-epoch_start)
             history.write(json.dumps(event) + '\n')
             history.flush()
             log_event('epoch', **event)
-            if selection.should_stop:
-                log_event('early_stop', epoch=epoch, patience_checks=config['patience_checks'])
+            if stopped:
+                stop_reason = 'author_validation_loss_moving_mean'
+                log_event('early_stop', epoch=epoch, official_epoch_index=epoch-1,
+                          early_stopping=config['early_stopping'], rule=config['early_stop_rule'],
+                          validation_loss=val_loss)
                 break
     training_seconds = time.monotonic() - train_start
     checkpoint = load_best(paths.exp / 'best.pt')
@@ -91,26 +103,17 @@ def execute(args, paths):
         raise ValueError('Restored checkpoint does not reproduce selected validation ACC')
     timing = dict(training_seconds=training_seconds, total_seconds=time.monotonic()-started,
                   epochs_completed=epoch, updates=epoch, best_epoch=selection.best_epoch,
+                  stop_reason=stop_reason, early_stop_rule=config['early_stop_rule'],
+                  checkpoint_selection='validation_accuracy_strict_improvement_earliest_tie',
                   peak_cuda_bytes=torch.cuda.max_memory_allocated() if features.is_cuda else 0)
-    if args.phase == 'dev':
-        # No test predictions, test ACC, or export_result in development/HPO.
-        record = dict(status='complete_development_validation_only', dataset=args.dataset,
-                      seed=args.seed, phase='dev', best_epoch=selection.best_epoch,
-                      best_validation_acc=selection.best_acc,
-                      config_sha256=manifest['config_sha256'],
-                      source_sha256=manifest['sources']['sha256'], timing=timing,
-                      checkpoint_restored=True, test_evaluated=False)
-        write_json(paths.exp / 'development.json', record)
-        log_event('development_complete', **record)
-    else:
-        result = export_result(paths, data, checkpoint=paths.exp / 'best.pt',
-                               best_epoch=selection.best_epoch,
-                               best_validation_acc=selection.best_acc,
-                               node_ids=data.node_ids, predictions=scores.argmax(-1),
-                               scores=scores, score_kind='logits', timing=timing)
-        log_event('single_seed_complete', test=result['test'], best_epoch=selection.best_epoch,
-                  best_validation_acc=selection.best_acc, timing=timing,
-                  replay_required=True)
+    result = export_result(paths, data, checkpoint=paths.exp / 'best.pt',
+                           best_epoch=selection.best_epoch,
+                           best_validation_acc=selection.best_acc,
+                           node_ids=data.node_ids, predictions=scores.argmax(-1),
+                           scores=scores, score_kind='logits', timing=timing)
+    log_event('single_seed_complete', test=result['test'], best_epoch=selection.best_epoch,
+              best_validation_acc=selection.best_acc, timing=timing,
+              configuration_policy='author_defaults_no_hpo_v1', replay_required=True)
     (paths.exp / 'TRAINING_COMPLETE').write_text('Training finished; formal runs still require replay.\n')
 
 
@@ -119,7 +122,7 @@ def run_cli():
     parser.add_argument('--dataset', required=True, choices=DATASETS)
     parser.add_argument('--seed', required=True, type=int)
     parser.add_argument('--device', default='cuda:0')
-    parser.add_argument('--phase', required=True, choices=('smoke', 'dev', 'formal'))
+    parser.add_argument('--phase', required=True, choices=('smoke', 'formal'))
     parser.add_argument('--run-id', required=True)
     parser.add_argument('--output-root', default=str(METHOD_DIR / 'exp'))
     parser.add_argument('--config', required=True)

@@ -1,12 +1,14 @@
 {
-  "hidden_dim": 256,
+  "hidden_dim": 16,
   "dropout": 0.5,
   "learning_rate": 0.01,
   "weight_decay": 0.0005,
   "epochs": 4,
-  "patience_checks": 0,
+  "early_stopping": 10,
+  "early_stop_rule": "official_zero_based_validation_loss_moving_mean",
   "optimizer": "TF1Adam",
   "adaptation": "relation_union",
   "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
-  "feature_processing": "canonical_unchanged"
+  "feature_processing": "canonical_unchanged",
+  "configuration_policy": "author_defaults_no_hpo_v1"
 }

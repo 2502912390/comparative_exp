@@ -1,105 +1,105 @@
-# GCN fixed-split reproduction
+# GCN fixed-author-default reproduction
 
-Upstream: `tkipf/gcn`, commit `39a4089fe72ad9f055ed6fdb9746abdcfebc4d81`;
-the original six `code/gcn/*.py` files remain unchanged. Implementation type:
-**PyTorch formula-preserving port**, not unmodified official TensorFlow code.
+Upstream: `tkipf/gcn`, commit `39a4089fe72ad9f055ed6fdb9746abdcfebc4d81`.
+The original six `code/gcn/*.py` files remain unchanged. This is a **PyTorch
+formula-preserving port**, not unmodified official TensorFlow code.
+
+The authoritative configuration is `configs/default.json`, identical for
+acm/dblp/yelp/amazon/mag: **hidden16, learning rate .01, dropout .5,
+first-layer L2 coefficient .0005, epochs200, early_stopping10**, exactly the flags in official `train.py`.
+There is **no validation hyperparameter search**. Validation selects the best
+training checkpoint only. The former width256/HPO queue was canceled by the
+user; its complete/partial artifacts remain under their original log/exp IDs
+and are not the new comparison results.
 
 ## Mechanism correspondence
 
 | Official implementation | Adapted implementation |
 |---|---|
-| `models.GCN._build`: two graph convolutions | `gcn_baseline.model.GCN`, exactly two learned matrices |
+| `models.GCN._build`: two graph convolutions, hidden1=16 | `gcn_baseline.model.GCN`, exactly two matrices, native hidden16 |
 | `layers.GraphConvolution`: `support @ (X @ W)` | Sparse CSR `torch.sparse.mm(support, X @ W)` |
-| First layer ReLU; final identity; default `bias=False` | ReLU first layer, raw class logits last layer, no bias |
-| Input dropout before each matrix; sparse first-layer input | Bernoulli inverted dropout before both matrices; dense feature storage includes zero entries, whose masks do not alter outputs. Distribution agrees on nonzeros; random draws need not match TF bitwise. |
-| `inits.glorot`: uniform ±sqrt(6/(fan_in+fan_out)) | `nn.init.xavier_uniform_(gain=1)` with same distribution |
-| `masked_softmax_cross_entropy` with mask/mean(mask) | Mean CE on all and only fixed outer train-mask nodes |
-| Weight decay only `layers[0]`, `tf.nn.l2_loss(W)` | Explicit `weight_decay * 0.5 * sum(W0²)`; W1 unregularized |
-| `tf.train.AdamOptimizer`, beta1=.9 beta2=.999 eps=1e-8 | `TF1Adam` preserves TF1 epsilon placement and bias-corrected learning-rate formula; not AdamW/global optimizer weight decay |
-| `utils.normalize_adj`: `(A D).transpose() D` | Exact `D Aᵀ D`, D=row-degree^-1/2, checked on a directed graph |
+| First ReLU; final identity; default `bias=False` | First ReLU, final raw class logits, no bias |
+| Input dropout before each matrix; sparse first input | Bernoulli inverted dropout before both matrices. Dense feature storage also samples zero entries, whose masks do not affect outputs. Same nonzero distribution; TF/PyTorch RNG is not bitwise equivalent. |
+| `inits.glorot`: uniform ±sqrt(6/(fan_in+fan_out)) | `xavier_uniform_(gain=1)` |
+| `masked_softmax_cross_entropy` with mask/mean(mask) | Mean CE on all fixed outer training nodes only |
+| Regularization only `layers[0]`, `tf.nn.l2_loss` | Explicit `.0005 * .5 * sum(W0²)`; W1 unregularized |
+| TF1 Adam, beta1=.9 beta2=.999 eps=1e-8 | `TF1Adam` preserves TF1 epsilon placement and corrected learning-rate formula; no AdamW/global weight decay |
+| `utils.normalize_adj`: `(A D).transpose() D` | Exact `D Aᵀ D`, D=row-degree^-1/2, verified on an asymmetric graph |
 
-The official SciPy operator transposes the adjacency. This equals D A D on
-undirected inputs; this port explicitly preserves the actual directed-input
-operator rather than assuming every provided graph is symmetric. The public
-graph convention remains row receiver / column sender before this native GCN
-operator. We do not force symmetrization or select a relation using test ACC.
+The actual SciPy operator transposes adjacency; this equals D A D for an
+undirected graph. This port preserves the actual directed-input operator,
+without assuming all data are symmetric or forcibly symmetrizing them. The
+public input graph convention is row receiver / column sender before the
+native GCN operator.
 
-## Deliberate benchmark adaptations
+## Benchmark input and evaluation adaptations
 
-- Canonical data, features, labels, class mapping and masks are loaded by
-  `shared.coe_benchmark`; source/split/label hashes must match registry.
-- All relation channels enter public `relation_union` (binary nonself union
-  plus exactly one unit self loop). This is a **protocol input adaptation**,
-  not a CCoE model mechanism. GCN applies its own operator afterwards and does
-  not add another self loop. No CCoE training, graph learner or weights enter.
-- Original Planetoid data/splits and original row-L1 feature normalization are
-  replaced by canonical benchmark inputs; canonical feature processing is
-  kept unchanged, including dataset-specific preprocessing. No row-L1/L2 is
-  added by this GCN port.
-- Hidden dimension is fixed at 256 instead of the original 16, following the
-  benchmark's preferred representation width; exactly two layers remain.
-  Effective dimension and exact trainable parameter count are in manifests.
-- Train/val/test masks are distinct. The official validation-loss moving
-  average stopping is replaced by strict validation-ACC improvement,
-  earliest tie, at most 400 epochs, patience 200 checks. Every epoch validates.
-  Development trials never compute test accuracy. Formal test is computed
-  from the restored best checkpoint, followed by separate-process replay.
-- Twelve candidates per dataset are preregistered in `configs/search_space.json`:
-  lr {.01,.005,.001} × first-layer L2 {.0005,0} × dropout {.5,.3}, all width256.
-  Seed1024 validation selects once; ties follow candidate order. All 60
-  development trials precede frozen configs and 25 new formal trainings.
-- Formal seeds are 1024–1028. Sparse graphs and all nodes are retained,
-  including MAG's 113919 nodes. No minibatch truncation or dense NxN matrices.
-- Python/NumPy/Torch/CUDA seeds and deterministic settings follow the public
-  API. Sparse CUDA kernels are not claimed to be bitwise deterministic across
-  hosts. Failed hash or replay assertions remain failures and are not relaxed.
+- Namespaced `shared.coe_benchmark` supplies canonical features, all nodes,
+  labels, class mapping and fixed masks with strict registry fingerprints.
+  No author same-name utils/model import contaminates this interface.
+- Every provided relation enters public `relation_union`: binary nonself
+  union plus one unit self loop. This is an **input adapter**, not a CCoE
+  mechanism. GCN normalizes the union afterwards without another self loop.
+  No CCoE learner, training or weights are used.
+- Official Planetoid data/splits and row-L1 feature normalization are replaced
+  by canonical observations. No extra normalization is applied by this port.
+- Train uses all outer train labels. Validation ACC strictly improves best
+  (ties retain earliest epoch); test is evaluated only after restoring best.
+  Author stopping is retained: at most200 epochs; after zero-based epoch>10,
+  stop when current validation loss exceeds the mean of the preceding10 losses.
+  Validation loss includes the official first-layer half-L2 term. Checkpoint
+  selection by validation ACC is independent of this loss-based stopping rule.
+- All five datasets use the single fixed default config and formal seeds
+  1024–1028. Formal run.py rejects any differing config or missing default-policy
+  declaration. No development trials, per-dataset config selection or test-based
+  relation/parameter choice is performed.
+- Sparse CSR retains all113919 MAG nodes and all union edges; no dense NxN,
+  cropped graph, or altered masks. Parameter count is reported per dataset.
+- Python/NumPy/Torch/CUDA seed settings use the public helper; CUDA sparse
+  kernels are not claimed to be cross-host bitwise deterministic. Failed
+  hashes, nonfinite objectives or replay differences remain errors.
 
-## Environment and validation
+## Environment and checks
 
-Run `reproduce/environment_probe.py` with `coe` first. It actually attempts
-TensorFlow/official model imports in an isolated subprocess and saves their
-errors, then witnesses CUDA forward/backward. Only an official compatibility
-failure permits cloning `coe_baseline_gcn`. `coe` is never installed into or
-modified. The clone uses its existing PyTorch/NumPy/SciPy; no packages are
-installed. `environment/env_spec.json` records this declared stack/resources.
+Real `coe` TensorFlow and official GCN imports failed with ModuleNotFoundError;
+GPU forward/backward passed. The earlier isolated clone is retained as history. The PyTorch port
+requires only packages already available in `coe`, so current training directly
+uses `/home/chenzhichao/miniconda3/envs/coe/bin/python` after a native16 sparse
+kernel and real-data check. No packages are installed/upgraded and `coe` is
+unchanged. The current environment spec records direct reuse of `coe`.
 
-Validation command checks an asymmetric normalization against the literal
-official SciPy expression, sparse/dense forward and parameter gradients,
-masked CE and half L2, and TF1 Adam against independent NumPy equations.
-Real-data smoke includes a four-update ACM run and one **full MAG** update,
-best-checkpoint restoration, export and fresh-process model replay. These
-are smoke artifacts, never formal table values. Exact witness logs live in
-method-local `log/`; machine-readable evidence is under `exp/`.
+The equation check uses **hidden16** and independently checks asymmetric SciPy
+normalization, sparse/dense forward and parameter gradients, masked CE/half-L2,
+and TF1 Adam's NumPy formula. The native16 coe check verifies exact official stopping boundaries and
+validation loss, and performs a canonical ACM update without evaluating test.
+The first new formal ACM task uses the full author200/early10 schedule and
+separately replays its selected validation-ACC checkpoint. Previous
+full-MAG sparse implementation checks remain applicable to the same graph
+operator; their width256 scores are smoke history and are never new table data.
 
-## Commands and artifacts
+## Running and monitoring
 
-From this method directory, set the env vars declared in `env_spec.json`, then:
+From this method directory after the core is committed/frozen:
 
 ```bash
-PYTHONPATH=/home/chenzhichao/Research/other_exp /home/chenzhichao/miniconda3/envs/coe_baseline_gcn/bin/python reproduce/check.py --device cuda:0 --run-id fresh_check
-PYTHONPATH=/home/chenzhichao/Research/other_exp /home/chenzhichao/miniconda3/envs/coe_baseline_gcn/bin/python reproduce/run_matrix.py --run-id gcn_new_unique_id --devices cuda:0 --seeds 1024 1025 1026 1027 1028
+/home/chenzhichao/miniconda3/envs/coe/bin/python reproduce/launch.py --run-id gcn_author_defaults_coe_20261014_c --session baseline_gcn_author_coe_20261014_c
 ```
 
-Physical GPU0 is process-bound by `CUDA_VISIBLE_DEVICES=0`; `cuda:0` means
-that bound GPU. Use fresh IDs; no command overwrites historical outputs.
-The controller must be started in tmux (or another persistent supervisor).
+PhysicalGPU0 is process-bound with CUDA_VISIBLE_DEVICES=0; two CPU threads.
+The queue runs25 formal trainings plus25 independent checkpoint replays. It
+never automatically generates mean/std or modifies the paper.
 
-- Controller: `log/<batch>/console.log`; current state:
-  `exp/<batch>/status.json`.
-- Development console: `log/dev_<batch>_cXX/<dataset>/seed1024/console.log`;
-  validation-only records and checkpoints at the matching `exp/` path.
-- Frozen configs: `exp/<batch>/frozen_configs/<dataset>.json`, with complete
-  validation candidate records at `exp/<batch>/selection/<dataset>.json`.
-- Formal console and replay: `log/formal_<batch>/<dataset>/seed<seed>/`;
-  weights, predictions, source snapshots, manifest and hashes in matching exp.
-- `exp/<batch>/COMPLETE` means all 60 development runs, 25 formal runs and 25
-  new-model replays passed. `FAILED`, `failure.json` and controller traceback
-  are retained on errors. The queue stops on failure without discarding seeds.
-- The controller **does not summarize**. After user confirmation, run
-  `reproduce/summarize.py --run-root exp/formal_<batch>` to invoke the public
-  strict five-seed mean/sample-std (ddof=1) exporter. It will refuse incomplete
-  or inconsistent results. No paper is modified.
+- Total log: `log/<batch>/console.log`; state: `exp/<batch>/status.json`.
+- Per-seed console/replay: `log/formal_<batch>/<dataset>/seed<seed>/`.
+- Checkpoints, full predictions, provenance/snapshots and results: corresponding
+  `exp/formal_<batch>/<dataset>/seed<seed>/`.
+- `exp/<batch>/COMPLETE` means all25 tasks and replays passed. `FAILED` and
+  `failure.json` retain errors and stop the queue rather than dropping seeds.
+- After user confirmation, manually run `reproduce/summarize.py --run-root
+  exp/formal_<batch>`; the public exporter requires five complete matching seeds
+  and reports mean/sample std (ddof=1), without paper modification.
 
-Only method core implementation, preregistered configs, environment spec,
-source metadata and this explanation are committed. Data, logs, weights,
-predictions and run snapshots remain untracked method-local artifacts.
+Historical `configs/c00..c11.json` and `search_space.json` are retained only as
+old-queue provenance; current CLI does not run them. All data/logs/weights and
+runtime snapshots are ignored by Git. Only core code, defaults, source metadata
+and documentation are committed.

@@ -1,3 +1,56 @@
+# Current author-default/coe checks — 2026-10-14
+
+Active execution directly uses `/home/chenzhichao/miniconda3/envs/coe/bin/python`.
+Native hidden16/lr.01/dropout.5/L2.0005/epochs200/early_stopping10 are identical
+for all five datasets. There is no HPO and no package/environment change.
+The original clone and earlier400/200/width256 evidence below are historical
+revisions; they do not describe the current training policy.
+
+Current coe checks **passed** on physicalGPU0 (RTX4090, torch2.1.1+cu121):
+
+- Native16 sparse/dense forward and gradients; asymmetric official graph
+  normalization; masked CE/first-layer half-L2 and TF1Adam NumPy update.
+- Literal author early stop: zero-based epoch10 cannot stop; epoch11 can;
+  mean is previous10 validation losses, and strict equality does not stop.
+- Canonical ACM3025-node/2211607-edge relation-union data identity matches
+  registry; one full native16 train update and validation loss including
+  first-layer L2 completed. Test was not evaluated.
+
+Evidence: `log/smoke_coe_env_20261014_gcn/coe_native16_author.log` and
+`exp/smoke_coe_native16_author_20261014_gcn/equations.json`. Environment-spec
+canonical hash: `6a6802fc`. Full formal ACM default train/replay will be the
+first new queue task after core commit/freeze. The other24 run automatically;
+final mean/std remains deferred until user confirmation.
+
+---
+
+## Historical revisions retained for provenance (superseded)
+
+# Fixed-default policy correction — 2026-10-14
+
+The user's requested policy is now active: native hidden16, lr=.01, dropout=.5,
+first-layer L2=.0005 from official train.py; identical for all five datasets.
+No HPO or 256-width change is active. The earlier HPO process group3110130
+(controller3110133 plus its own child) was verified and terminated; old logs
+and weights were preserved. `exp/gcn_table1_20261014_a/status.json` and
+`cancellation.json` record `canceled_by_user_policy_change`.
+
+The **new hidden16** asymmetric normalization, sparse/dense forward/gradients,
+masked CE/half-L2 and TF1Adam NumPy checks all passed on physicalGPU0.
+Evidence: `log/smoke_coe_env_20261014_gcn/equations_defaults.log` and
+`exp/smoke_equations_defaults_20261014_gcn/equations.json`.
+
+The graph implementation, environment and masks were unchanged. Previous
+full-MAG sparse correctness evidence remains relevant to that operator; its
+smoke scores are not new paper data. New complete ACM default training and
+independent replay are the first task of the fresh formal queue, only after
+commit/freeze and launch authorization. The queue then continues the other24
+tasks; no automatic summary. New paths are in REPRODUCTION.md.
+
+---
+
+## Historical implementation checks (width256 smoke; not current defaults)
+
 # GCN implementation checks — 2026-10-14
 
 Executor: inherited current session model; exact model identifier is not exposed

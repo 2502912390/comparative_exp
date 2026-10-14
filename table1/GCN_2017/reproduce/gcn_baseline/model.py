@@ -1,8 +1,25 @@
 """Two graph convolutions; matches tkipf/gcn's actual TF1 operators."""
 import math
+import numpy as np
 import torch
 from torch import nn
 from torch.nn import functional as F
+
+
+def author_early_stop(validation_losses, epoch_index, early_stopping=10):
+    """Official train.py's zero-based moving-validation-loss stop condition.
+
+    Current loss is already appended. TF's scalar loss is float32, so keep
+    that dtype for the literal preceding-window mean. This is independent
+    of the benchmark's best-checkpoint choice on validation accuracy.
+    """
+    if len(validation_losses) != epoch_index + 1 or epoch_index < 0:
+        raise ValueError('Validation history must contain exactly the completed epochs')
+    losses = np.asarray(validation_losses, dtype=np.float32)
+    if not np.isfinite(losses).all() or early_stopping != 10:
+        raise ValueError('Use finite validation losses and official early_stopping=10')
+    return bool(epoch_index > early_stopping and
+                losses[-1] > np.mean(losses[-(early_stopping + 1):-1]))
 
 
 def official_normalize(union):
@@ -23,7 +40,7 @@ def official_normalize(union):
 
 
 class GCN(nn.Module):
-    def __init__(self, input_dim, classes, hidden_dim=256, dropout=0.5):
+    def __init__(self, input_dim, classes, hidden_dim=16, dropout=0.5):
         super().__init__()
         self.weight0 = nn.Parameter(torch.empty(input_dim, hidden_dim))
         self.weight1 = nn.Parameter(torch.empty(hidden_dim, classes))
