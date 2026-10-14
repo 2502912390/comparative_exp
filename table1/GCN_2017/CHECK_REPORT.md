@@ -1,3 +1,27 @@
+# FP64 evaluation repair — 2026-10-14
+
+Current training staysFP32 in coe with the complete author defaults. Validation,
+final export and replay use an independent FP64 GPU model copy, disclosed in
+config and adaptation metadata; all input/source/split/graph hashes stay exact.
+The prior nativeFP32 formal batch c was retained as FAILED after strict logit
+replay failed (1.9e-6–2.9e-6 discrepancy, no changed class prediction). Enabling
+strict algorithms did not solve native CSR accumulation nondeterminism.
+
+A native16 FP64 sparse evaluation copy agrees with the independent dense
+formula at1e-12. Evidence: log/smoke_coe_env_20261014_gcn/coe_native16_fp64_eval.log
+and exp/smoke_coe_native16_fp64_eval_20261014_gcn/equations.json.
+The original failed checkpoint also passed two separate-process FP64 inference
+checks at the original1e-6 tolerance, with unchanged predictions; this is
+diagnostic evidence only and does not change the failed original result.
+See its log/fp64_first.log, log/fp64_second.log and exp/fp64_diagnosis.json under
+the original formal ACM1024 directory. No full extra model was trained.
+
+Replacement queue d reruns all25 seeds after commit; no rounding, relaxed
+assertions, missing-score replay or reused failed result. Statistics remain
+deferred. The first fresh ACM run is the full training/replay regression.
+
+---
+
 # Current author-default/coe checks — 2026-10-14
 
 Active execution directly uses `/home/chenzhichao/miniconda3/envs/coe/bin/python`.

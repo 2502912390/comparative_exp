@@ -12,7 +12,7 @@ Actual versions/executable are saved per run. From the GCN_2017 directory:
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/home/chenzhichao/Research/other_exp /home/chenzhichao/miniconda3/envs/coe/bin/python reproduce/check.py --device cuda:0 --run-id coe_native16_NEW_ID --data-check
-/home/chenzhichao/miniconda3/envs/coe/bin/python reproduce/launch.py --run-id gcn_author_defaults_coe_20261014_c --session baseline_gcn_author_coe_20261014_c
+/home/chenzhichao/miniconda3/envs/coe/bin/python reproduce/launch.py --run-id gcn_author_defaults_coe_20261014_d --session baseline_gcn_author_coe_20261014_d
 ```
 
 The first check verifies the literal official early-stop boundary, sparse/dense

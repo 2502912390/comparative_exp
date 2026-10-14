@@ -1,4 +1,5 @@
 import argparse
+import copy
 from contextlib import ExitStack, redirect_stdout, redirect_stderr
 from pathlib import Path
 import json
@@ -36,6 +37,8 @@ def execute(args, paths):
                               parameter_count=sum(p.numel() for p in model.parameters()),
                               device=args.device, author_commit=source['code_commit'])
     selection = BestCheckpoint(paths.exp / 'best.pt', patience_checks=0)
+    evaluation_model = copy.deepcopy(model).double().eval()
+    evaluation_features, evaluation_support = features.double(), support.double()
     if torch.cuda.is_available() and str(args.device).startswith('cuda'):
         torch.cuda.reset_peak_memory_stats()
     log_event('training_started', dataset=args.dataset, seed=args.seed, phase=args.phase,
@@ -59,10 +62,11 @@ def execute(args, paths):
             if any(not torch.isfinite(p.grad).all() for p in model.parameters()):
                 raise FloatingPointError(f'Nonfinite gradient at epoch {epoch}')
             optimizer.step()
-            model.eval()
+            evaluation_model.load_state_dict(model.state_dict(), strict=True)
+            evaluation_model.eval()
             with torch.no_grad():
-                validation_logits = model(features, support)
-                val_loss = float(model.loss(validation_logits, labels, masks['val'], config['weight_decay']))
+                validation_logits = evaluation_model(evaluation_features, evaluation_support)
+                val_loss = float(evaluation_model.loss(validation_logits, labels, masks['val'], config['weight_decay']))
                 if not torch.isfinite(torch.tensor(val_loss)):
                     raise FloatingPointError('Nonfinite validation objective')
                 val_acc = float((validation_logits[masks['val']].argmax(-1) == labels[masks['val']]).float().mean())
@@ -93,11 +97,11 @@ def execute(args, paths):
     if checkpoint['payload']['config_sha256'] != manifest['config_sha256']:
         raise ValueError('Checkpoint/config identity mismatch')
     # Deliberately construct a fresh inference model, with no train-mode state.
-    fresh = make_model(config, data, args.device)
+    fresh = make_model(config, data, args.device).double()
     fresh.load_state_dict(checkpoint['payload']['model_state'], strict=True)
     fresh.eval()
     with torch.no_grad():
-        scores = fresh(features, support)
+        scores = fresh(evaluation_features, evaluation_support)
     replay_val_acc = float((scores[masks['val']].argmax(-1) == labels[masks['val']]).float().mean())
     if replay_val_acc != selection.best_acc:
         raise ValueError('Restored checkpoint does not reproduce selected validation ACC')
@@ -160,7 +164,7 @@ def replay_cli():
     data, features, support, _, _, adaptation = prepare(manifest['dataset'], args.device)
     if adaptation != manifest['adaptation']:
         raise ValueError('Replay graph adaptation differs')
-    model = make_model(manifest['config'], data, args.device)
+    model = make_model(manifest['config'], data, args.device).double()
     best = load_best(job / 'best.pt')
     if (best['payload']['config_sha256'] != manifest['config_sha256'] or
             best['payload']['sources_sha256'] != manifest['sources']['sha256']):
@@ -168,7 +172,7 @@ def replay_cli():
     model.load_state_dict(best['payload']['model_state'], strict=True)
     model.eval()
     with torch.no_grad():
-        scores = model(features, support)
+        scores = model(features.double(), support.double())
     result = verify_model_replay(job, node_ids=data.node_ids, predictions=scores.argmax(-1), scores=scores)
     log_event('replay_verified', job_dir=str(job), test=checked['result']['test'], **result)
 

@@ -64,10 +64,18 @@ def equation_check(device):
     assert not author_early_stop(histories[0][:11], 10, 10)
     assert author_early_stop(histories[0], 11, 10)
     assert not author_early_stop([1.0]*12, 11, 10)  # strict > retains equality
+    import copy
+    fp64 = copy.deepcopy(model).double().eval()
+    with torch.no_grad():
+        result64 = fp64(features.double(), support.double())
+        dense64 = dense.double() @ (torch.relu(dense.double() @
+                   (features.double() @ fp64.weight0)) @ fp64.weight1)
+    torch.testing.assert_close(result64, dense64, atol=1e-12, rtol=1e-12)
     return dict(status='passed', device=str(device), normalization='asymmetric scipy official expression',
                 hidden_dim=16, sparse_dense_forward=True, sparse_dense_gradients=True,
                 masked_ce_first_layer_half_l2=True, tf1_adam_numpy_reference=True,
                 official_early_stop_boundary_and_mean=True,
+                independent_fp64_evaluation_dense_equation=True,
                 python_executable=__import__('sys').executable, torch_version=torch.__version__,
                 gpu_name=torch.cuda.get_device_name() if str(device).startswith('cuda') else None)
 

@@ -82,7 +82,7 @@ operator; their width256 scores are smoke history and are never new table data.
 From this method directory after the core is committed/frozen:
 
 ```bash
-/home/chenzhichao/miniconda3/envs/coe/bin/python reproduce/launch.py --run-id gcn_author_defaults_coe_20261014_c --session baseline_gcn_author_coe_20261014_c
+/home/chenzhichao/miniconda3/envs/coe/bin/python reproduce/launch.py --run-id gcn_author_defaults_coe_20261014_d --session baseline_gcn_author_coe_20261014_d
 ```
 
 PhysicalGPU0 is process-bound with CUDA_VISIBLE_DEVICES=0; two CPU threads.
@@ -103,3 +103,20 @@ Historical `configs/c00..c11.json` and `search_space.json` are retained only as
 old-queue provenance; current CLI does not run them. All data/logs/weights and
 runtime snapshots are ignored by Git. Only core code, defaults, source metadata
 and documentation are committed.
+
+## Evaluation precision and failed-run provenance
+
+Training/optimizer/dropout remain FP32 with all author defaults. CUDA CSR FP32
+accumulation produced1.9e-6–2.9e-6 independent-replay logit differences despite
+identical class predictions, including with strict deterministic algorithms.
+The failed `gcn_author_defaults_coe_20261014_c` batch and all artifacts are
+retained and excluded from the replacement batch.
+
+Validation (both loss and ACC), final export and independent checkpoint replay
+now use an **independent FP64 GPU evaluation copy** of the FP32 learned weights,
+features and normalized sparse support. The copy is created by deepcopy and
+state updates without extra training RNG consumption. Canonical observations,
+splits, class IDs and graph fingerprints are unchanged; only evaluation
+arithmetic is promoted. This numerical implementation choice is disclosed in
+config/manifest adaptation metadata. No score rounding, tolerance increase,
+sample truncation or disabled replay check is used.

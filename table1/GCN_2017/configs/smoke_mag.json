@@ -10,5 +10,7 @@
   "adaptation": "relation_union",
   "graph_operator": "tkipf_utils_normalize_adj_transpose_v1",
   "feature_processing": "canonical_unchanged",
-  "configuration_policy": "author_defaults_no_hpo_v1"
+  "configuration_policy": "author_defaults_no_hpo_v1",
+  "training_precision": "float32",
+  "evaluation_precision": "float64"
 }

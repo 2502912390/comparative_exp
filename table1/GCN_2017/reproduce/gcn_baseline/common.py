@@ -12,7 +12,7 @@ METHOD_DIR = Path(__file__).resolve().parents[2]
 REPO_ROOT = METHOD_DIR.parents[1]
 DATASETS = ('acm', 'dblp', 'yelp', 'amazon', 'mag')
 CONFIG_KEYS = {'hidden_dim', 'dropout', 'learning_rate', 'weight_decay', 'epochs',
-               'early_stopping', 'early_stop_rule', 'optimizer', 'adaptation', 'graph_operator', 'feature_processing', 'configuration_policy'}
+               'early_stopping', 'early_stop_rule', 'optimizer', 'adaptation', 'graph_operator', 'feature_processing', 'configuration_policy', 'training_precision', 'evaluation_precision'}
 
 
 def read_config(path):
@@ -25,6 +25,7 @@ def read_config(path):
             or config['hidden_dim'] != 16 or not 0 <= config['dropout'] < 1
             or config['learning_rate'] <= 0 or config['weight_decay'] < 0
             or config['configuration_policy'] != 'author_defaults_no_hpo_v1'
+            or config['training_precision'] != 'float32' or config['evaluation_precision'] != 'float64'
             or config['learning_rate'] != 0.01 or config['weight_decay'] != 0.0005
             or config['dropout'] != 0.5 or config['epochs'] <= 0 or config['epochs'] > 200
             or config['early_stopping'] != 10
@@ -53,7 +54,9 @@ def prepare(dataset, device):
     support = official_normalize(union)
     metadata.update(graph_operator='tkipf_utils_normalize_adj_transpose_v1',
                     normalized_graph_sha256=graph_fingerprint([support]),
-                    graph_layout='sparse_csr', feature_processing='canonical_unchanged')
+                    graph_layout='sparse_csr', feature_processing='canonical_unchanged',
+                    training_precision='float32', evaluation_precision='float64',
+                    evaluation_reason='CUDA CSR FP32 accumulation exceeded strict 1e-6 checkpoint replay tolerance')
     target = torch.device(device)
     if target.type == 'cuda' and not torch.cuda.is_available():
         raise RuntimeError('Requested CUDA is unavailable; no CPU fallback')
