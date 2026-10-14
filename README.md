@@ -130,3 +130,8 @@ TUNED 原文主实验使用 PIE、HandWritten、Scene15、Caltech101、Animal、
 - [环境只读探查](registry/environment_probe.json)：先测试 coe，有实际兼容性错误后才 clone；不改原 coe。
 
 本目录现在是本地源码 Git 仓库。仅追踪核心代码、配置、许可证、必要说明及来源登记。PDF/数据/日志/权重留在磁盘但不追踪；各方法训练产物统一放其自己的 log/ 与 exp/。作者仓库原来的 17 份 Git 元数据保存在忽略目录 .upstream_git/，原提交也保留在 sources.json。初始提交由 Codex 生成；本轮没有启动基线训练、安装依赖或创建新 conda 环境。
+
+
+## 公共基准 API（P00，协议 v1.1）
+
+已实现 [shared.coe_benchmark 公共模块](shared/README.md)：支持全部 14 个数据集、冻结身份指纹、稀疏图输入适配、seed、验证 checkpoint、结果导出、重放对照和完整五种子汇总。数据身份规则未改变，方法训练器仍需逐一适配。检查产物保存在 shared/log、shared/exp，不纳入 Git。

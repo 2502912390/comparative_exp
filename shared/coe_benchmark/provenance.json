@@ -1,0 +1,171 @@
+{
+  "reference_directory": "/home/chenzhichao/Research/CoE2/conditional-joint-acm-tuning-1005",
+  "functions": {
+    "load_mag": {
+      "source": "data_loader.py",
+      "first_line": 72,
+      "last_line": 101
+    },
+    "load_dblp": {
+      "source": "data_loader.py",
+      "first_line": 105,
+      "last_line": 124
+    },
+    "load_acm": {
+      "source": "data_loader.py",
+      "first_line": 128,
+      "last_line": 145
+    },
+    "load_yelp": {
+      "source": "data_loader.py",
+      "first_line": 149,
+      "last_line": 167
+    },
+    "load_amazon": {
+      "source": "data_loader.py",
+      "first_line": 169,
+      "last_line": 184
+    },
+    "load_esp": {
+      "source": "data_loader.py",
+      "first_line": 211,
+      "last_line": 256
+    },
+    "load_flick": {
+      "source": "data_loader.py",
+      "first_line": 258,
+      "last_line": 301
+    },
+    "load_iap": {
+      "source": "data_loader.py",
+      "first_line": 303,
+      "last_line": 345
+    },
+    "load_nus": {
+      "source": "data_loader.py",
+      "first_line": 347,
+      "last_line": 389
+    },
+    "create_masks": {
+      "source": "data_loader.py",
+      "first_line": 391,
+      "last_line": 414
+    },
+    "create_zero_adjacency_matrix": {
+      "source": "data_loader.py",
+      "first_line": 415,
+      "last_line": 421
+    },
+    "create_multiview_masks": {
+      "source": "data_loader.py",
+      "first_line": 424,
+      "last_line": 450
+    },
+    "_row_bytes": {
+      "source": "data_loader.py",
+      "first_line": 453,
+      "last_line": 458
+    },
+    "_joint_view_key": {
+      "source": "data_loader.py",
+      "first_line": 461,
+      "last_line": 462
+    },
+    "create_wikipedia_masks": {
+      "source": "data_loader.py",
+      "first_line": 465,
+      "last_line": 518
+    },
+    "_mat_cell_values": {
+      "source": "data_loader.py",
+      "first_line": 521,
+      "last_line": 525
+    },
+    "_coerce_view": {
+      "source": "data_loader.py",
+      "first_line": 528,
+      "last_line": 539
+    },
+    "_feature_tensor": {
+      "source": "data_loader.py",
+      "first_line": 542,
+      "last_line": 552
+    },
+    "_relation_adjacency": {
+      "source": "data_loader.py",
+      "first_line": 555,
+      "last_line": 580
+    },
+    "load_multiview_node": {
+      "source": "data_loader.py",
+      "first_line": 583,
+      "last_line": 640
+    },
+    "_load_data": {
+      "source": "data_loader.py",
+      "first_line": 643,
+      "last_line": 666
+    },
+    "validate_dataset": {
+      "source": "data_loader.py",
+      "first_line": 669,
+      "last_line": 689
+    },
+    "load_data": {
+      "source": "data_loader.py",
+      "first_line": 692,
+      "last_line": 693
+    },
+    "normalize": {
+      "source": "utils.py",
+      "first_line": 316,
+      "last_line": 341
+    },
+    "symmetrize": {
+      "source": "utils.py",
+      "first_line": 345,
+      "last_line": 346
+    },
+    "sparse_mx_to_torch_sparse_tensor": {
+      "source": "utils.py",
+      "first_line": 391,
+      "last_line": 398
+    },
+    "remove_self_loop": {
+      "source": "utils.py",
+      "first_line": 419,
+      "last_line": 426
+    },
+    "sparse_tensor_add_self_loop": {
+      "source": "utils.py",
+      "first_line": 437,
+      "last_line": 444
+    },
+    "adj_values_one": {
+      "source": "utils.py",
+      "first_line": 451,
+      "last_line": 454
+    }
+  },
+  "source_sha256": {
+    "data_loader.py": "5f6eac57d62841a02e3de8b56abe9a45b87e5f32a063770e2262990962851343",
+    "utils.py": "bbf4f6f3fedd571ea5ad2d11fda0da25e31e63988f691acc5443e91df649cd24",
+    "joint_data.py": "d3ef2d894f5239b79247b557368d28dedf4f9a3a3991fc81b4b1dfcc38857e00"
+  },
+  "changes": [
+    "Use relative imports inside shared.coe_benchmark; no generic utils/model imports.",
+    "Replace module-global data roots with ContextVar per-call roots.",
+    "Fail on missing explicitly selected data root; do not silently fall back to a legacy root.",
+    "Replace invalid normalization-mode process exit with ValueError; valid numerical paths unchanged.",
+    "Public graphs are sparse; dense historical hashing is reproduced in bounded row chunks."
+  ],
+  "forbidden_imports": [
+    "joint_train",
+    "joint_model",
+    "joint_graph",
+    "params",
+    "utils",
+    "model",
+    "data_loader"
+  ]
+}

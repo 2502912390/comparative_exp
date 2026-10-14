@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "protocol_id": "coe1005_fixedsplit_v1",
+  "protocol_id": "coe1005_fixedsplit_v1.1",
   "methods": [
     {
       "method": "DMG",
@@ -593,5 +593,8 @@
         "exp"
       ]
     }
-  ]
+  ],
+  "previous_protocol_id": "coe1005_fixedsplit_v1",
+  "data_protocol_id": "coe1005_fixedsplit_v1",
+  "shared_implementation_version": "1.0.0"
 }

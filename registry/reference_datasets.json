@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "created_date": "2026-10-14",
-  "protocol_id": "coe1005_fixedsplit_v1",
+  "protocol_id": "coe1005_fixedsplit_v1.1",
   "reference_code_directory": "/home/chenzhichao/Research/CoE2/conditional-joint-acm-tuning-1005",
   "reference_configuration": "/home/chenzhichao/Research/CoE2/conditional-joint-acm-tuning-1005/configs/idea1004_hpo_best_all14_uniform256_tuned_20261011.json",
   "reference_configuration_sha256": "2e2ff87a24c8f5e0177714fe79444159772cf8fa81e540ea20d346b04be6d237",
@@ -1193,5 +1193,8 @@
       }
     ],
     "scope": "CPU data loading and identity checks only; no model, graph learner, or training."
-  }
+  },
+  "previous_protocol_id": "coe1005_fixedsplit_v1",
+  "data_protocol_id": "coe1005_fixedsplit_v1",
+  "shared_implementation_version": "1.0.0"
 }

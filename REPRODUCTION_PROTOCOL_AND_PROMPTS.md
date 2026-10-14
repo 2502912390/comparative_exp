@@ -1,6 +1,6 @@
 # 表 1–3 对比方法复现协议与逐方法 Prompt
 
-基准代码：`/home/chenzhichao/Research/CoE2/conditional-joint-acm-tuning-1005`。协议标识：`coe1005_fixedsplit_v1`；制定日期：2026-10-14。本文依据实际源码及正式五种子产物编写，没有运行新基线训练，也没有修改 `coe` 环境。
+基准代码：`/home/chenzhichao/Research/CoE2/conditional-joint-acm-tuning-1005`。协议标识：`coe1005_fixedsplit_v1.1`；制定日期：2026-10-14。本文依据实际源码及正式五种子产物编写，没有运行新基线训练，也没有修改 `coe` 环境。
 
 18 个论文方法共对应 103 个“方法 × 数据集”组合，正式评估合计 **515 次训练**；开发调参和冒烟检查另计。MvCGE 暂无已核实的作者源码，其 25 次属于计划量。共享方法只保留一个目录，一次适配全部对应 Table。
 
@@ -396,3 +396,10 @@ MC dropout 是原生不确定性机制，不能为普通 eval() 方便将其关�
 按协议进行配置冻结、checkpoint 保存、最终 test 与逐节点复算，导出每控制每数据集五次 mean±sample std。210 是三控制×14×5 的名义评估数；共享 Best-view/Mean 视图训练后，实际训练任务数应按实现真实计数。所有产物在 other_exp/controls/log 与 controls/exp，核心代码由根仓库追踪。先试 coe，实质失败才 clone。使用当前模型，不启动子代理。
 ```
 
+
+
+## P00 公共模块实现状态（v1.1）
+
+公共模块已实现为 [shared.coe_benchmark](shared/README.md)，纯数据逻辑、无参数输入适配、验证 checkpoint 选择、结果/源码快照导出、模型重放对照和严格五种子统计均有 API。数据身份协议仍为 coe1005_fixedsplit_v1，未更改任何登记指纹或默认划分。P00 现可直接用 shared/README.md 中的 audit 命令复核；无需再次提取公共代码。各方法仍须独立实现自身模型、训练、checkpoint 重建和新推理，之后调用共同 API。
+
+v1.1 增加可执行接口与结果门槛，relation_union / graph_to_feature_context_v1 的数学规则沿用原协议。完整功能核验由本轮 shared/exp/audit_<run_id>/audit.json 记录；正式基线任务仍未启动。
