@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "date": "2026-10-14",
+  "python": "/home/chenzhichao/miniconda3/envs/coe/bin/python",
+  "coe_modified": false,
+  "clone_created": false,
+  "sandbox_cuda_binding": "unavailable; host recheck passed",
+  "physical_gpu": 7,
+  "native_gradient_max_absolute_error": 4.440892098500626e-16,
+  "full_node_smoke_and_replay": "table1/HDMI_2021/exp/smoke_hdmi_preflight_20261014_2005/preflight.json",
+  "datasets": [
+    "acm",
+    "dblp",
+    "yelp",
+    "amazon",
+    "mag"
+  ],
+  "scope": "three unsupervised updates/four probe updates; not formal results",
+  "independent_reviewer": "not_run",
+  "executor_model": "current session GPT-6"
+}

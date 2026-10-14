@@ -1,0 +1,424 @@
+{
+  "schema_version": 1,
+  "method": "HDMI",
+  "protocol_id": "coe1005_fixedsplit_v1.1",
+  "datasets": [
+    "acm",
+    "dblp",
+    "yelp",
+    "amazon",
+    "mag"
+  ],
+  "development_seed": 1024,
+  "formal_seeds": [
+    1024,
+    1025,
+    1026,
+    1027,
+    1028
+  ],
+  "selection": "maximum_validation_accuracy_earliest_candidate_tie",
+  "test_during_development": false,
+  "budget_per_dataset": 12,
+  "candidates": [
+    {
+      "candidate_id": "c00",
+      "config": {
+        "schema_version": 1,
+        "width": 256,
+        "same_discriminator": false,
+        "pretrain_epochs": 400,
+        "probe_epochs": 400,
+        "patience_checks": 200,
+        "learning_rate": 0.001,
+        "weight_decay": 0.0,
+        "probe_learning_rate": 0.1,
+        "probe_weight_decay": 0.0,
+        "coef_layers": [
+          1.0,
+          2.0,
+          0.001
+        ],
+        "coef_fusion": [
+          0.01,
+          0.1,
+          0.001
+        ],
+        "discriminator_chunk_size": 4096,
+        "checkpoint_discriminators": true,
+        "pretrain_selection": "fixed_final_unsupervised_epoch",
+        "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+        "pretrain_label_access": false,
+        "probe_seed_rule": "training_seed_plus_100000",
+        "device_math": "float32_tf32_disabled",
+        "cpu_threads": 2
+      }
+    },
+    {
+      "candidate_id": "c01",
+      "config": {
+        "schema_version": 1,
+        "width": 256,
+        "same_discriminator": false,
+        "pretrain_epochs": 400,
+        "probe_epochs": 400,
+        "patience_checks": 200,
+        "learning_rate": 0.001,
+        "weight_decay": 0.0,
+        "probe_learning_rate": 0.1,
+        "probe_weight_decay": 0.0,
+        "coef_layers": [
+          1.0,
+          2.0,
+          0.01
+        ],
+        "coef_fusion": [
+          0.01,
+          0.1,
+          0.01
+        ],
+        "discriminator_chunk_size": 4096,
+        "checkpoint_discriminators": true,
+        "pretrain_selection": "fixed_final_unsupervised_epoch",
+        "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+        "pretrain_label_access": false,
+        "probe_seed_rule": "training_seed_plus_100000",
+        "device_math": "float32_tf32_disabled",
+        "cpu_threads": 2
+      }
+    },
+    {
+      "candidate_id": "c02",
+      "config": {
+        "schema_version": 1,
+        "width": 256,
+        "same_discriminator": false,
+        "pretrain_epochs": 400,
+        "probe_epochs": 400,
+        "patience_checks": 200,
+        "learning_rate": 0.001,
+        "weight_decay": 0.0,
+        "probe_learning_rate": 0.01,
+        "probe_weight_decay": 0.0,
+        "coef_layers": [
+          1.0,
+          2.0,
+          0.001
+        ],
+        "coef_fusion": [
+          0.01,
+          0.1,
+          0.001
+        ],
+        "discriminator_chunk_size": 4096,
+        "checkpoint_discriminators": true,
+        "pretrain_selection": "fixed_final_unsupervised_epoch",
+        "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+        "pretrain_label_access": false,
+        "probe_seed_rule": "training_seed_plus_100000",
+        "device_math": "float32_tf32_disabled",
+        "cpu_threads": 2
+      }
+    },
+    {
+      "candidate_id": "c03",
+      "config": {
+        "schema_version": 1,
+        "width": 256,
+        "same_discriminator": false,
+        "pretrain_epochs": 400,
+        "probe_epochs": 400,
+        "patience_checks": 200,
+        "learning_rate": 0.001,
+        "weight_decay": 0.0,
+        "probe_learning_rate": 0.01,
+        "probe_weight_decay": 0.0,
+        "coef_layers": [
+          1.0,
+          2.0,
+          0.01
+        ],
+        "coef_fusion": [
+          0.01,
+          0.1,
+          0.01
+        ],
+        "discriminator_chunk_size": 4096,
+        "checkpoint_discriminators": true,
+        "pretrain_selection": "fixed_final_unsupervised_epoch",
+        "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+        "pretrain_label_access": false,
+        "probe_seed_rule": "training_seed_plus_100000",
+        "device_math": "float32_tf32_disabled",
+        "cpu_threads": 2
+      }
+    },
+    {
+      "candidate_id": "c04",
+      "config": {
+        "schema_version": 1,
+        "width": 256,
+        "same_discriminator": false,
+        "pretrain_epochs": 400,
+        "probe_epochs": 400,
+        "patience_checks": 200,
+        "learning_rate": 0.0005,
+        "weight_decay": 0.0,
+        "probe_learning_rate": 0.1,
+        "probe_weight_decay": 0.0,
+        "coef_layers": [
+          1.0,
+          2.0,
+          0.001
+        ],
+        "coef_fusion": [
+          0.01,
+          0.1,
+          0.001
+        ],
+        "discriminator_chunk_size": 4096,
+        "checkpoint_discriminators": true,
+        "pretrain_selection": "fixed_final_unsupervised_epoch",
+        "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+        "pretrain_label_access": false,
+        "probe_seed_rule": "training_seed_plus_100000",
+        "device_math": "float32_tf32_disabled",
+        "cpu_threads": 2
+      }
+    },
+    {
+      "candidate_id": "c05",
+      "config": {
+        "schema_version": 1,
+        "width": 256,
+        "same_discriminator": false,
+        "pretrain_epochs": 400,
+        "probe_epochs": 400,
+        "patience_checks": 200,
+        "learning_rate": 0.0005,
+        "weight_decay": 0.0,
+        "probe_learning_rate": 0.1,
+        "probe_weight_decay": 0.0,
+        "coef_layers": [
+          1.0,
+          2.0,
+          0.01
+        ],
+        "coef_fusion": [
+          0.01,
+          0.1,
+          0.01
+        ],
+        "discriminator_chunk_size": 4096,
+        "checkpoint_discriminators": true,
+        "pretrain_selection": "fixed_final_unsupervised_epoch",
+        "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+        "pretrain_label_access": false,
+        "probe_seed_rule": "training_seed_plus_100000",
+        "device_math": "float32_tf32_disabled",
+        "cpu_threads": 2
+      }
+    },
+    {
+      "candidate_id": "c06",
+      "config": {
+        "schema_version": 1,
+        "width": 256,
+        "same_discriminator": false,
+        "pretrain_epochs": 400,
+        "probe_epochs": 400,
+        "patience_checks": 200,
+        "learning_rate": 0.0005,
+        "weight_decay": 0.0,
+        "probe_learning_rate": 0.01,
+        "probe_weight_decay": 0.0,
+        "coef_layers": [
+          1.0,
+          2.0,
+          0.001
+        ],
+        "coef_fusion": [
+          0.01,
+          0.1,
+          0.001
+        ],
+        "discriminator_chunk_size": 4096,
+        "checkpoint_discriminators": true,
+        "pretrain_selection": "fixed_final_unsupervised_epoch",
+        "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+        "pretrain_label_access": false,
+        "probe_seed_rule": "training_seed_plus_100000",
+        "device_math": "float32_tf32_disabled",
+        "cpu_threads": 2
+      }
+    },
+    {
+      "candidate_id": "c07",
+      "config": {
+        "schema_version": 1,
+        "width": 256,
+        "same_discriminator": false,
+        "pretrain_epochs": 400,
+        "probe_epochs": 400,
+        "patience_checks": 200,
+        "learning_rate": 0.0005,
+        "weight_decay": 0.0,
+        "probe_learning_rate": 0.01,
+        "probe_weight_decay": 0.0,
+        "coef_layers": [
+          1.0,
+          2.0,
+          0.01
+        ],
+        "coef_fusion": [
+          0.01,
+          0.1,
+          0.01
+        ],
+        "discriminator_chunk_size": 4096,
+        "checkpoint_discriminators": true,
+        "pretrain_selection": "fixed_final_unsupervised_epoch",
+        "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+        "pretrain_label_access": false,
+        "probe_seed_rule": "training_seed_plus_100000",
+        "device_math": "float32_tf32_disabled",
+        "cpu_threads": 2
+      }
+    },
+    {
+      "candidate_id": "c08",
+      "config": {
+        "schema_version": 1,
+        "width": 256,
+        "same_discriminator": false,
+        "pretrain_epochs": 400,
+        "probe_epochs": 400,
+        "patience_checks": 200,
+        "learning_rate": 0.003,
+        "weight_decay": 0.0,
+        "probe_learning_rate": 0.1,
+        "probe_weight_decay": 0.0,
+        "coef_layers": [
+          1.0,
+          2.0,
+          0.001
+        ],
+        "coef_fusion": [
+          0.01,
+          0.1,
+          0.001
+        ],
+        "discriminator_chunk_size": 4096,
+        "checkpoint_discriminators": true,
+        "pretrain_selection": "fixed_final_unsupervised_epoch",
+        "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+        "pretrain_label_access": false,
+        "probe_seed_rule": "training_seed_plus_100000",
+        "device_math": "float32_tf32_disabled",
+        "cpu_threads": 2
+      }
+    },
+    {
+      "candidate_id": "c09",
+      "config": {
+        "schema_version": 1,
+        "width": 256,
+        "same_discriminator": false,
+        "pretrain_epochs": 400,
+        "probe_epochs": 400,
+        "patience_checks": 200,
+        "learning_rate": 0.003,
+        "weight_decay": 0.0,
+        "probe_learning_rate": 0.1,
+        "probe_weight_decay": 0.0,
+        "coef_layers": [
+          1.0,
+          2.0,
+          0.01
+        ],
+        "coef_fusion": [
+          0.01,
+          0.1,
+          0.01
+        ],
+        "discriminator_chunk_size": 4096,
+        "checkpoint_discriminators": true,
+        "pretrain_selection": "fixed_final_unsupervised_epoch",
+        "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+        "pretrain_label_access": false,
+        "probe_seed_rule": "training_seed_plus_100000",
+        "device_math": "float32_tf32_disabled",
+        "cpu_threads": 2
+      }
+    },
+    {
+      "candidate_id": "c10",
+      "config": {
+        "schema_version": 1,
+        "width": 256,
+        "same_discriminator": false,
+        "pretrain_epochs": 400,
+        "probe_epochs": 400,
+        "patience_checks": 200,
+        "learning_rate": 0.003,
+        "weight_decay": 0.0,
+        "probe_learning_rate": 0.01,
+        "probe_weight_decay": 0.0,
+        "coef_layers": [
+          1.0,
+          2.0,
+          0.001
+        ],
+        "coef_fusion": [
+          0.01,
+          0.1,
+          0.001
+        ],
+        "discriminator_chunk_size": 4096,
+        "checkpoint_discriminators": true,
+        "pretrain_selection": "fixed_final_unsupervised_epoch",
+        "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+        "pretrain_label_access": false,
+        "probe_seed_rule": "training_seed_plus_100000",
+        "device_math": "float32_tf32_disabled",
+        "cpu_threads": 2
+      }
+    },
+    {
+      "candidate_id": "c11",
+      "config": {
+        "schema_version": 1,
+        "width": 256,
+        "same_discriminator": false,
+        "pretrain_epochs": 400,
+        "probe_epochs": 400,
+        "patience_checks": 200,
+        "learning_rate": 0.003,
+        "weight_decay": 0.0,
+        "probe_learning_rate": 0.01,
+        "probe_weight_decay": 0.0,
+        "coef_layers": [
+          1.0,
+          2.0,
+          0.01
+        ],
+        "coef_fusion": [
+          0.01,
+          0.1,
+          0.01
+        ],
+        "discriminator_chunk_size": 4096,
+        "checkpoint_discriminators": true,
+        "pretrain_selection": "fixed_final_unsupervised_epoch",
+        "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+        "pretrain_label_access": false,
+        "probe_seed_rule": "training_seed_plus_100000",
+        "device_math": "float32_tf32_disabled",
+        "cpu_threads": 2
+      }
+    }
+  ],
+  "official_start": "c00: native lr=0.001, probe_lr=0.1, native six MI coefficients; width 256 per common protocol; fixed 400+400 budgets",
+  "executor_model": "current session GPT-6; no subagent/reviewer calls",
+  "independent_reviewer": "not_run"
+}

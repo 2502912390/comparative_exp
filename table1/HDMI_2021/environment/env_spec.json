@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "method": "HDMI",
+  "base": "/home/chenzhichao/miniconda3/envs/coe",
+  "resolved_environment": "coe",
+  "build": "reuse_existing_read_only",
+  "pip_phases": [],
+  "required_versions": {
+    "python": "3.10.21",
+    "torch": "2.1.1+cu121",
+    "numpy": "1.26.4",
+    "scipy": "1.15.3",
+    "sklearn": "1.5.2",
+    "tqdm": "4.70.1"
+  },
+  "env": {
+    "OMP_NUM_THREADS": "2",
+    "MKL_NUM_THREADS": "2",
+    "OPENBLAS_NUM_THREADS": "2",
+    "PYTHONUNBUFFERED": "1",
+    "COE_DATA_ROOT": "/home/chenzhichao/Research/CoE2/data/CoE_dataset",
+    "COE_MULTIVIEW_DATA_ROOT": "/home/chenzhichao/Research/CoE2/data/Multi-view datasets"
+  },
+  "resource": {
+    "gpus_per_worker": 1,
+    "physical_gpu": 7,
+    "cpu_threads": 2
+  },
+  "smoke": {
+    "gpu_tests": [
+      {
+        "cmd": "CUDA_VISIBLE_DEVICES=7 /home/chenzhichao/miniconda3/envs/coe/bin/python -u table1/HDMI_2021/reproduce/checks.py --device cuda:0",
+        "expect": "HDMI_CHECKS_PASSED"
+      }
+    ]
+  },
+  "weight_dirs": {},
+  "run_commands": [],
+  "clone_trigger": null,
+  "executor_model": "current session GPT-6",
+  "independent_agent_follows_doc": "not_run; user prohibits subagents without explicit authorization"
+}

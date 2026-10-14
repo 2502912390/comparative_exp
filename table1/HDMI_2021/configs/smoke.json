@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "width": 256,
+  "same_discriminator": false,
+  "pretrain_epochs": 3,
+  "probe_epochs": 4,
+  "patience_checks": 200,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0,
+  "probe_learning_rate": 0.1,
+  "probe_weight_decay": 0.0,
+  "coef_layers": [
+    1.0,
+    2.0,
+    0.001
+  ],
+  "coef_fusion": [
+    0.01,
+    0.1,
+    0.001
+  ],
+  "discriminator_chunk_size": 4096,
+  "checkpoint_discriminators": true,
+  "pretrain_selection": "fixed_final_unsupervised_epoch",
+  "probe_selection": "outer_validation_accuracy_strict_improvement_earliest_tie",
+  "pretrain_label_access": false,
+  "probe_seed_rule": "training_seed_plus_100000",
+  "device_math": "float32_tf32_disabled",
+  "cpu_threads": 2
+}
