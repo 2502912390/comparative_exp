@@ -1,0 +1,13 @@
+{
+  "hidden_channels": 32, "num_layers": 2, "num_heads": 4, "dropout": 0.0,
+  "M": 30, "K": 10, "tau": 0.25, "lamda": 0.1,
+  "rb_order": 0, "rb_trans": "sigmoid",
+  "use_bn": true, "use_residual": true, "use_gumbel": true,
+  "use_act": false, "use_jk": false, "use_edge_loss": true,
+  "lr": 0.01, "weight_decay": 0.005, "epochs": 500,
+  "optimizer": "Adam", "early_stopping": "none_author_main_py",
+  "eval_step": 1, "edge_chunk": 16384, "activation_checkpoint": true,
+  "adaptation": "relation_union", "training_path": "full_graph",
+  "parameter_policy": "official_generic_defaults_no_hpo",
+  "executor_model": "current_session_model", "reviewer": "not_run"
+}

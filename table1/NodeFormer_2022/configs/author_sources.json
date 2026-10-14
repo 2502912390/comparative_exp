@@ -1,0 +1,12 @@
+{
+  "upstream_commit": "5390b6908326905b2eb840f65a70b0f4082aef43",
+  "datasets_without_specific_official_recipe": ["acm", "dblp", "yelp", "amazon", "mag"],
+  "policy": "Use official general defaults for every dataset; no validation/test configuration selection.",
+  "numeric_defaults": {"source": "code/parse.py:parser_add_main_args", "parameters": ["hidden_channels=32", "dropout=0", "lr=0.01", "weight_decay=0.005", "num_layers=2", "num_heads=4", "M=30", "K=10", "tau=0.25", "lamda=0.1", "rb_order=0", "rb_trans=sigmoid", "epochs=500", "eval_step=1"]},
+  "model_flags": {"source": "code/nodeformer.py:NodeFormer.__init__ default arguments, also enabled by graph-present recipes in code/run.sh", "parameters": ["use_bn=true", "use_gumbel=true", "use_residual=true", "use_act=false", "use_jk=false", "use_edge_loss=true"], "clarification": "parse.py action=store_true booleans are CLI opt-ins, whereas these are the official model defaults and intended graph-model recipe flags; explicitly supplied here to retain NodeFormer Gumbel mechanism."},
+  "optimizer": {"source": "code/main.py training loop", "value": "torch.optim.Adam(lr=0.01, weight_decay=0.005); other Adam defaults unchanged"},
+  "stopping": {"source": "code/main.py for epoch in range(args.epochs)", "value": "500 epochs; author provides no early stopping; validation accuracy strict-improvement earliest-tie best selection"},
+  "structural_prior": "relation_union is supplied to edge regularization with lambda=0.1. rb_order=0 is the official generic default, so additive relational bias is inactive, with its original implementation preserved. No use_graph or relation switch is searched.",
+  "scaling": "All five use complete full-graph attention. Checkpointed attention and chunked exact edge-log gradient bound intermediate memory without node/edge sampling. edge_chunk=16384 is an implementation memory bound, not a statistical/model hyperparameter.",
+  "inference": "Official eval disables Gumbel. Every validation forward retains official query-dependent random projection. Best checkpoint stores actual per-layer projection matrices, their generation seeds, and inference RNG; frozen saved projections reproduce the selected validation forward and final test."
+}

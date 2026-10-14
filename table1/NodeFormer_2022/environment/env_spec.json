@@ -1,0 +1,12 @@
+{
+  "name": "coe_baseline_nodeformer",
+  "base": "/home/chenzhichao/miniconda3/envs/coe",
+  "python": "3.10", "torch": "2.1.1+cu121", "cuda": "12.1",
+  "pip_phases": [
+    ["torch-scatter==2.1.2+pt21cu121", "torch-sparse==0.6.18+pt21cu121", "--no-index", "-f", "https://data.pyg.org/whl/torch-2.1.0+cu121.html"],
+    ["torch-geometric==2.5.3"]
+  ],
+  "env": {"OMP_NUM_THREADS": "2", "MKL_NUM_THREADS": "2", "OPENBLAS_NUM_THREADS": "2", "PYTHONDONTWRITEBYTECODE": "1"},
+  "smoke": {"command": "python -m table1.NodeFormer_2022.reproduce.checks --device cuda:0", "expect": "WITNESS"},
+  "independent_agent_follows_doc": "not_run: user prohibits subagents"
+}
