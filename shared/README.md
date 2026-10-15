@@ -122,8 +122,9 @@ result = export_result(
 # evidence 原样保存，不冒充 probability；任何 scores 的 argmax 必须等于预测。
 
 # 方法自己的 replay.py 重新构造并加载模型，从 checkpoint 新推理：
-verify_model_replay(job.exp, node_ids=fresh_ids, predictions=fresh_predictions,
-                    scores=fresh_scores)
+# 2026-10-15 修订：以新推理的逐节点预测和 Acc 重放一致为门槛。
+# 分数仍保存并检查有限性；微小 logits 差异另作诊断，不要求逐元素严格一致。
+verify_model_replay(job.exp, node_ids=fresh_ids, predictions=fresh_predictions)
 recount_result(job.exp)      # 仅复算已保存预测、数据身份、文件与源码快照哈希
 ```
 
@@ -134,6 +135,12 @@ recount_result(job.exp)      # 仅复算已保存预测、数据身份、文件�
 `predictions.npz` 保存完整 labels/masks/class mapping、导出的节点 ID、预测和原生分数语义，供独立重算历史指纹与 Acc。`result.json` 保存正确数/总数、选择 epoch、校验值和重放状态。
 
 `recount` 不运行模型，不能替代 checkpoint replay。`verify_model_replay` 接收各方法 **从保存模型重新推理的**输出，比较预测及可选分数；不能直接把旧 predictions.npz 当成新推理输出。它仅提供比较/记录工具，模型重建与推理由各方法实现，公共代码无法替调用方证明推理来源。
+
+### 浮点分数与重放（2026-10-15 修订）
+
+后续方法默认保持作者原生精度，通常为 FP32，不为微小分数误差额外切换 FP64 或重跑训练。新进程必须恢复真实 checkpoint、输入/随机推理状态并重新推理；节点身份、逐节点类别预测、正确数/测试数及 Acc 保持一致。分数的形状、有限性和 argmax 语义仍须核对，微小 logits 差异单独记录，不作为停止队列的理由。
+
+现有 `verify_model_replay` 在显式提供 `scores` 时仍使用严格逐元素比较。按本次修订，后续调用采用上面的预测比较接口，并将新旧分数的差异另记诊断日志；这一接口原已支持，不需要更改共享实现或模型。不得直接把历史 `predictions.npz` 作为新推理来源。正在运行的冻结批次保持原实现，避免修改共享源码触发来源不一致，也不回写历史 manifest 或混用不同批次。
 
 ## 矩阵：计划与各方法 CLI 约定
 

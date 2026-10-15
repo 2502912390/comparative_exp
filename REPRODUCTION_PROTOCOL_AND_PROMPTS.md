@@ -91,6 +91,7 @@
 - 五个种子的 **源代码、数据与划分、最终配置、协议版本一致** 才能汇总。缺少 seed 或失败时状态为 incomplete，不输出“5 seeds”主表值；不得丢弃低分 seed。
 - OOM/崩溃重试仍用同一 seed 和数学模型。优先稀疏化、等价分块和激活 checkpoint；不得偷偷降维、删节点、删关系、换小数据集。失败记录不删除，正式汇总只纳入该 seed 的一次有效重跑。
 - 推理若含 MC dropout/随机采样（如 UVF），固定采样次数及独立评估 RNG，保存其状态，并能从 best checkpoint 复算同一 Acc。不得在测试上反复抽样挑分数。
+- **数值重放规则修订（2026-10-15，按用户要求）**：默认保留作者原生计算精度，通常为 FP32。checkpoint 重放以相同节点上的预测类别和复算 Acc 一致为主要完成条件；数据、划分、标签/类别映射、权重和来源文件的身份检查仍严格执行。GPU 浮点运算的微小 logits 差异仅作数值诊断记录，不单独停止队列，不为满足过严的逐元素分数阈值切换 FP64、改变训练流程或从头重跑。非有限分数、预测/Acc 不一致或身份检查失败仍须定位。公共 helper 在显式传入 scores 时仍执行严格分数检查；后续方法按修订规则只把新推理的 node_ids/predictions 传给 verify_model_replay，分数差异另记日志，不能拿旧预测冒充新推理。已开始的冻结批次维持其已登记实现并继续运行，避免因改核验规则再次中断；不要在运行中改其共享源码、配置或覆盖产物。
 - 设置 Python/NumPy/框架/CUDA seed；PyTorch 关闭 cuDNN benchmark 并启用 deterministic 设置。明确记录稀疏算子中不能完全保证确定性的部分，不把它们说成严格逐位确定。
 
 源码依据：[joint_train.py:31](/home/chenzhichao/Research/CoE2/conditional-joint-acm-tuning-1005/joint_train.py:31)、[joint_train.py:164](/home/chenzhichao/Research/CoE2/conditional-joint-acm-tuning-1005/joint_train.py:164)、[joint_train.py:207](/home/chenzhichao/Research/CoE2/conditional-joint-acm-tuning-1005/joint_train.py:207)、[summarize_joint.py:43](/home/chenzhichao/Research/CoE2/conditional-joint-acm-tuning-1005/summarize_joint.py:43)。
