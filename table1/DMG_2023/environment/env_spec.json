@@ -1,0 +1,29 @@
+{
+  "method": "DMG",
+  "provider": "local",
+  "strategy": "existing_coe_read_only_first",
+  "python": "/home/chenzhichao/miniconda3/envs/coe/bin/python",
+  "required_execution_packages": [
+    "torch",
+    "numpy",
+    "scipy",
+    "scikit-learn"
+  ],
+  "unused_original_dependencies": [
+    "torch_geometric (author degree helper replaced by torch.bincount)",
+    "ruamel.yaml (defaults explicitly frozen to JSON)",
+    "DGL original dataset downloads"
+  ],
+  "clone_only_after_actual_failure": true,
+  "executor_model": "inherited_current_session_model; exact_id_not_exposed",
+  "environment_name": "coe",
+  "resolved_environment": "coe",
+  "clone_performed": false,
+  "package_changes": [],
+  "actual_execution_status": "passed_cpu_and_cuda",
+  "evidence": {
+    "cpu_acm": "exp/smoke_dmg_acm_cpu_20261015_a/acm/seed1024/replay.json",
+    "cuda_formulas": "exp/smoke_dmg_checks_20261015_a/checks.json",
+    "full_mag": "exp/smoke_dmg_mag_cuda_20261015_a/mag/seed1024/replay.json"
+  }
+}

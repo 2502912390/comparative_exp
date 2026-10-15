@@ -1,0 +1,68 @@
+{
+  "policy": "author_default_no_hpo",
+  "generic_defaults": {
+    "sc": 3.0,
+    "activation": "relu",
+    "isBias": false,
+    "patience": 20,
+    "test_epo": 50,
+    "test_lr": 0.3,
+    "dropout": 0.1,
+    "feature_drop": 0.1,
+    "c_dim": 8,
+    "p_dim": 2,
+    "lr_max": 1.0,
+    "lr_min": 0.001,
+    "weight_decay": 0.0001,
+    "alpha": 0.08,
+    "beta": 1.0,
+    "lammbda": 1.0,
+    "num_iters": 200,
+    "inner_epochs": 10,
+    "phi_num_layers": 2,
+    "phi_hidden_size": 256,
+    "hid_units": 256,
+    "decolayer": 2,
+    "neighbor_num": 300,
+    "sample_neighbor": 30,
+    "sample_num": 50,
+    "tau": 0.5
+  },
+  "dataset_overrides": {
+    "acm": {
+      "num_iters": 200,
+      "decolayer": 3,
+      "alpha": 0.02,
+      "beta": 0.8,
+      "lammbda": 3.0,
+      "tau": 0.5
+    },
+    "dblp": {
+      "feature_drop": 0.1,
+      "num_iters": 400,
+      "alpha": 0.1,
+      "beta": 0.05,
+      "lammbda": 0.05,
+      "tau": 0.7,
+      "test_epo": 300,
+      "test_lr": 0.05
+    }
+  },
+  "parameter_sources": {
+    "generic_defaults": "code/main.py:get_args parser defaults",
+    "acm": "code/args.yaml:DMG-acm-Node",
+    "dblp": "code/args.yaml:DMG-dblp-Node",
+    "yelp": "code/main.py generic defaults (no official matching yaml)",
+    "amazon": "code/main.py generic defaults (no official matching yaml)",
+    "mag": "code/main.py generic defaults (no official matching yaml)"
+  },
+  "fixed_adaptations": {
+    "probe_runs": 1,
+    "pretrain": "train from scratch, no external absent checkpoint",
+    "common_s_views": "all provided relations",
+    "features": "canonical unchanged",
+    "graph": "positive support, replace diagonal by sc, DMG symmetric degree normalization",
+    "checkpoint": "strict validation accuracy earliest tie, only train labels fit linear head",
+    "backbone_stop": "native loss strict decrease; count deterioration only after itr100; patience20"
+  }
+}
