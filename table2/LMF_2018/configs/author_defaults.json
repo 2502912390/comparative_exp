@@ -1,0 +1,21 @@
+{
+  "method": "LMF",
+  "parameter_policy": "author_default_no_hpo",
+  "precision": "FP32",
+  "encoder": "per_view_official_static_SubNet",
+  "fusion": "constant_augmented_low_rank_factor_product",
+  "inference_batch_size": 256,
+  "variant": "LMF_static_V_POM_Confidence_template",
+  "hidden": 16,
+  "dropout": 0.3,
+  "post_fusion_dropout": 0.5,
+  "rank": 4,
+  "factor_lr": 0.0005,
+  "lr": 0.001,
+  "weight_decay": 0.0,
+  "batch_size": 16,
+  "gradient_accumulation_steps": 1,
+  "epochs": 100,
+  "patience": 20,
+  "stopping_rule": "native_validation_CE_strict_improvement_patience20; best checkpoint independently val_ACC"
+}

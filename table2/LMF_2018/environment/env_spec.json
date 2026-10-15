@@ -1,0 +1,36 @@
+{
+  "base": "/home/chenzhichao/miniconda3/envs/coe",
+  "method": "LMF",
+  "required_imports": [
+    "torch",
+    "numpy",
+    "scipy"
+  ],
+  "pip_phases": [],
+  "package_changes": [],
+  "smoke": {
+    "command": "python -m reproduce.checks --device cuda:0",
+    "expect": "WITNESS PASS"
+  },
+  "executor_model": "current inherited session model; exact identifier not exposed",
+  "independent_agent_follows_doc": "not_run; not authorized",
+  "resolved_environment": "coe",
+  "environment_name": "coe",
+  "actual_versions": {
+    "python": "3.10.21",
+    "torch": "2.1.1+cu121",
+    "torch_cuda": "12.1",
+    "numpy": "1.26.4"
+  },
+  "actual_scipy": "1.15.3",
+  "validation": {
+    "cpu": true,
+    "cuda": true,
+    "canonical_datasets": 9,
+    "smoke_training_replays": [
+      "exp/smoke_lmf_esp_20261015_a/esp/seed1024",
+      "exp/smoke_lmf_mv_acm_20261015_a/mv_acm/seed1024",
+      "exp/smoke_lmf_mv_prokaryotic_20261015_a/mv_prokaryotic/seed1024"
+    ]
+  }
+}

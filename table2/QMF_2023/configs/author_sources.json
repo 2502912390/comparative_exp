@@ -1,0 +1,15 @@
+{
+  "template": "code/RGBD-scene-recognition/train_QMF_nyud2.py get_args/get_optimizer/get_scheduler and model_forward_train; code/RGBD-scene-recognition/models/QMF.py",
+  "paper": "paper Appendix B.2: Adam lr1e-4, lambda0.1, temperature1, Ts1; confidence -0.1*energy is official released weighting.",
+  "choice": "Use one complete positive-budget native RGBD NYUD2 configuration for every new dataset, not non-executable text max_epochs0. Read/compare text path: text detaches fusion confidence, lambda1 and updates history before ranking; RGBD chosen variant does not detach, lambda0.1 and ranks before updating.",
+  "encoder": "Native hidden=[] classifier retained, BERT/ResNet replaced by existing static-vector input with independent per-view Linear(d_v,C). No raw-modality preprocessing/dropout/backbone widths imposed on these vectors.",
+  "numerical": "Uniform history initially has zero denominator in official code: define identical histories as tied rank0/margin0. Flush incomplete accumulation groups instead of silently dropping their gradients.",
+  "sha256": {
+    "text-image-classification/train_qmf.py": "8fc5dac478fea6d48b0d50262476f630d4069980715d742cdd8b62070f058551",
+    "text-image-classification/src/models/late_fusion.py": "fe40937691018115b8291fbf83e85a4547e9d9d0913a7be3b43586d036a3e3e8",
+    "text-image-classification/src/utils/utils.py": "b17ba4538bb6d8194526269f6da3ade5b9f75a646eb7b631f3c9760544016a99",
+    "RGBD-scene-recognition/models/QMF.py": "7f0b0202814ae2b8d82c135fc679442d0c2ae218037f39cc00cb72c5014f42ee",
+    "RGBD-scene-recognition/train_QMF_nyud2.py": "c00da2e2f2345ee16f22244110847e8f6b37c48018c5383672bb57ac1383da35",
+    "RGBD-scene-recognition/utils/crl_utils.py": "4747ee337ee7fcb42d3d408870ceb76c87c491c8cf62ba6d24be937e0a5e5cab"
+  }
+}

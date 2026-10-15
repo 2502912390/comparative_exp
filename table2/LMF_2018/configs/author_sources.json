@@ -1,0 +1,11 @@
+{
+  "template": "code/hyperparams.txt: POM Confidence first reported configuration; code/train_iemocap.py epochs100/patience20 and classification CE sum",
+  "adaptation": "All static views use official vector SubNet at the published audio/video hidden16 width; dropout0.3 uses its first static branch uniformly. No fictitious audio/video/text assignment. Rank4/factor_lr5e-4/lr1e-3/wd0/batch16 from Confidence row.",
+  "unused_text": "TextSubNet was read; LSTM is intentionally replaced by same static SubNet because no sequences exist.",
+  "hyperparams_text": "\taudio hidden\tvideo hidden\ttext hidden\taudio dropout\tvideo dropout\ttext dropout\tfactor lr\tlearning rate\trank\tbatch size\tweight decay\n\nFor POM:\n\nConfidence\t16\t16\t64\t0.3\t0.5\t0.2\t0.0005\t0.001\t4\t16\t0\n\nPassion\t\t16\t16\t64\t0.3\t0.5\t0.2\t0.0005\t0.001\t4\t16\t0  \n\nPleasant\t16\t16\t256\t0.1\t0.15\t0.5\t0.0003\t0.003\t1\t128\t0\n\nDominance\t8\t8\t64\t0.1\t0.2\t0.2\t0.003\t0.0003\t4\t8\t0\n\nCredible\t(same model setting as confidence)\n\nVivid\t\t16\t8\t64\t0.15\t0.15\t0.15\t0.003\t0.0005\t16\t32\t0.01\n\nExpertise\t8\t16\t64\t0.2\t0.15\t0.3\t0.003\t0.0003\t16\t16\t0.001\n\nEntertaining\t8\t8\t64\t0.2\t0.2\t0.15\t0.0005\t0.001\t8\t8\t0\n\nReserve\t\t8\t16\t64\t0.5\t0.1\t0.15\t0.003\t0.0003\t16\t8\t0.001\n\nTrusting\t16\t8\t128\t0.1\t0.5\t0.15\t0.0003\t0.001\t16\t16\t0\n\nRelaxed\t\t8\t8\t64\t0.5\t0.1\t0.2\t0.0005\t0.0003\t8\t16\t0\n\nOutgoing\t16\t16\t256\t0.1\t0.15\t0.2\t0.003\t0.0005\t4\t16\t0.01\n\nThorough\t(same model setting as confidence)\n\nNervous\t\t4\t8\t256\t0\t0.5\t0.1\t0.003\t0.003\t8\t64\t0\n\nSentiment\t16\t16\t64\t0.5\t0.5\t0.2\t0.003\t0.001\t4\t8\t0.002\n\nPersuasive\t(same model setting as confidence)\n\nHumorous\t8\t8\t64\t0.5\t0.2\t0.15\t0.003\t0.001\t4\t4\t0.001\n\nFor IEMOCAP:\n\nAngry\t\t8\t4\t64\t0.3\t0.1\t0.15\t0.003\t0.0005\t8\t64\t0.001\n\nSad\t\t8\t4\t128\t0\t0\t0\t0.0005\t0.003\t4\t64\t0.002\n\nHappy\t\t4\t16\t128\t0.3\t0.1\t0.5\t0.003\t0.001\t1\t128\t0.002\n\nNeutral\t\t32\t8\t64\t0.2\t0.5\t0.2\t0.003\t0.0005\t16\t16\t0.002\n",
+  "sha256": {
+    "model.py": "5e375d007eeda13cbb068cd5c5e990b1dbc1b3e2434160420a61ac56aeb09291",
+    "train_iemocap.py": "2d613f12f5f7d75950ed1ab9499639ac9c862bc1faaeaa51584e1a81f2289904",
+    "hyperparams.txt": "18a299ae8dae83653b4f124fbb13a1de711f97770c0e45514244ad8b31a28654"
+  }
+}

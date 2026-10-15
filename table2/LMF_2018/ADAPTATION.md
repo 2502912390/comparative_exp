@@ -1,0 +1,11 @@
+# LMF: static feature and multi-view adaptation
+
+The official SubNet (BatchNorm, input dropout, three Linear/ReLU layers) is retained independently per static view. TextSubNet LSTM is not applied to fabricated sequences. Every view uses the first published POM Confidence static template (hidden16,dropout0.3); rank4/factor-lr0.0005/lr0.001/weight_decay0/batch16 are reported in hyperparams.txt. This is a disclosed fixed extension to V views, not the original 3-modality experiment. Width16 matches both static branch widths in that row; no 256-wide common backbone.
+
+Fusion exactly retains a prepended constant1, each factor[rank,hidden+1,C], elementwise product across all V, learned rank weights and bias. Xavier normal factors/weights, native Linear/BatchNorm initialization. No concatenation MLP. Native post_fusion_dropout declared but never executed, matching release. Output C replaces regression task and summed CE matches train_iemocap. Native epochs100/patience20 on validation CE retained independently of public val-ACC best. Singleton final train batch is merged into preceding batch, never discarded; eval BatchNorm uses running statistics. No dataset here requires dropping a training node.
+
+Canonical fixed identities, all nine datasets, seeds1024–1028, no search, no split changes. Table2 uses supplied text/image vectors. Table3 exclusively uses public graph_to_feature_context_v1: relation views concat(X,row_l2(A²X)), an input adaptation, not a CCoE learned model. MV-ACM dimensions1870/3740/3740/3740/3740, Citeseer7406/3703; Prokaryotic393/3/438 all retained. Wikipedia fixed693-node test remains untouched. Sparse graphs never densified, no reference models/weights imported.
+
+Train labels only. Strict validation ACC/earliest tie selects complete best; restored best is exported once and replayed in a new process. Native FP32 retained, finite logits drift diagnostic only, exact full-node classes/Acc required. All core/config/source hashes frozen; public canonical hashes and source assertions remain strict. Outputs method-local exp/log only, no paper changes. coe read-only; clone only actual required dependency failure. No raw-image/text optional packages imported. All unused author tasks unchanged in code/.
+
+Executor: current inherited session model; exact identifier not exposed. Independent reviewer/Astra: not_run (not authorized).

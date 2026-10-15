@@ -1,0 +1,23 @@
+{
+  "method": "QMF",
+  "parameter_policy": "author_default_no_hpo",
+  "precision": "FP32",
+  "encoder": "identity_on_existing_features_plus_native_linear_classifier",
+  "fusion": "sum_modality_logits_times_negative_scaled_energy",
+  "inference_batch_size": 256,
+  "variant": "QMF_RGBD_NYUD2_core_static_V",
+  "hidden": [],
+  "lr": 0.0001,
+  "weight_decay": 1e-05,
+  "batch_size": 256,
+  "gradient_accumulation_steps": 3,
+  "epochs": 500,
+  "patience": 20,
+  "lr_factor": 0.3,
+  "lr_patience": 10,
+  "ranking_weight": 0.1,
+  "temperature": 1.0,
+  "confidence_scale": 0.1,
+  "detach_fusion_weights": false,
+  "stopping_rule": "native_validation_ACC_strict_improvement_patience20"
+}
