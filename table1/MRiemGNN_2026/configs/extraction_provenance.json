@@ -1,0 +1,52 @@
+{
+  "author_commit": "6fc9b96122c6d202516b56ade3806b1cbcb937f1",
+  "official_repository_paper_evidence": "paper.txt:50",
+  "scope": "official-code reproduction; explicit canonical data/evaluation adaptations",
+  "files": [
+    {
+      "author_file": "code/kernels.py",
+      "author_sha256": "155734b50acd09b88b04039a3b1ed5b555bb67575ff7b9977327efd2a0ba159d",
+      "adapter_file": "reproduce/native/kernels.py",
+      "adapter_sha256": "155734b50acd09b88b04039a3b1ed5b555bb67575ff7b9977327efd2a0ba159d",
+      "changes": "none"
+    },
+    {
+      "author_file": "code/model_mriemgnn.py",
+      "author_sha256": "dca0bffb4059b2c88bb11ad4673413ff86e9b1ea2d857f9bc27a0584fa099f03",
+      "adapter_file": "reproduce/native/model.py",
+      "adapter_sha256": "afa2f3188ba310abb3d558fec2b63f3c2518018032c16993061a2338c99ceeb4",
+      "changes": "package-relative layer import"
+    },
+    {
+      "author_file": "code/layer_mriemgnn.py",
+      "author_sha256": "20fe2e82d7228b4615785d615b52ec03676295501b10bc91b3f43ae997b5fcf1",
+      "adapter_file": "reproduce/native/layer.py",
+      "adapter_sha256": "8a52be04b8e9c62fcfd1deebddb62e39ec6595866494b5da79c1de97da1e53e1",
+      "changes": "package-relative imports and sparse-equivalent aggregation"
+    },
+    {
+      "author_file": "code/manifolds/__init__.py",
+      "author_sha256": "f9341313a804087fc5d6314d8622dc1590aa5e1e0040d22cc55a92f7fbf1d120",
+      "adapter_file": "reproduce/native/manifolds/__init__.py",
+      "adapter_sha256": "f9341313a804087fc5d6314d8622dc1590aa5e1e0040d22cc55a92f7fbf1d120",
+      "changes": "none"
+    },
+    {
+      "author_file": "code/manifolds/euclidean.py",
+      "author_sha256": "e003754f2d36c763eefb405417f8c492a160a8ae8fc49a0d727974c55a6c2eda",
+      "adapter_file": "reproduce/native/manifolds/euclidean.py",
+      "adapter_sha256": "e003754f2d36c763eefb405417f8c492a160a8ae8fc49a0d727974c55a6c2eda",
+      "changes": "none"
+    },
+    {
+      "author_file": "code/manifolds/hyperboloid.py",
+      "author_sha256": "ebe3943058f32cc5fb15b621a917680f483bca607832c9395944eb02a31e63bd",
+      "adapter_file": "reproduce/native/manifolds/hyperboloid.py",
+      "adapter_sha256": "ebe3943058f32cc5fb15b621a917680f483bca607832c9395944eb02a31e63bd",
+      "changes": "none"
+    }
+  ],
+  "geometric_caveat": "Released default curvature parameters/manifold methods do not participate in forward; preserved and diagnosed, not invented.",
+  "executor_model": "current inherited session model; exact identifier not exposed",
+  "independent_reviewer": "not_run"
+}

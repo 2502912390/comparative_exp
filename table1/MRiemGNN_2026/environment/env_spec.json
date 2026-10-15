@@ -1,0 +1,58 @@
+{
+  "method": "MRiemGNN",
+  "environment_name": "coe",
+  "python": "/home/chenzhichao/miniconda3/envs/coe/bin/python",
+  "strategy": "actual_required_execution_first",
+  "required_packages": [
+    "torch",
+    "numpy",
+    "scipy",
+    "sklearn"
+  ],
+  "unused_requirements": [
+    "torch-geometric (only separate data-preparation tool)",
+    "ogb (unused converter)"
+  ],
+  "package_changes": [],
+  "clone_only_after_actual_execution_dependency_failure": true,
+  "executor_model": "current inherited session model; exact identifier not exposed",
+  "independent_doc_reviewer": "not_run; not authorized for this task",
+  "resolved_environment": "coe",
+  "clone_performed": false,
+  "actual_execution_status": "passed_cpu_gpu_acm_and_full_mag_replay",
+  "versions": {
+    "torch": "2.1.1+cu121",
+    "numpy": "1.26.4",
+    "scipy": "1.15.3",
+    "sklearn": "1.5.2",
+    "cuda_available": true,
+    "pyg_present_but_unused": false
+  },
+  "precision": "native FP32 for training/validation/export/replay",
+  "evidence": {
+    "checks": "exp/dev_preflight_20261015_a",
+    "canonical_datasets": "exp/dev_preflight_20261015_a/data_audit.json",
+    "real_dataset_replays": {
+      "acm": {
+        "result": "exp/smoke_mriemgnn_acm_20261015_a/acm/seed1024/result.json",
+        "replay": "exp/smoke_mriemgnn_acm_20261015_a/acm/seed1024/replay.json",
+        "numerics": {
+          "max_abs_logit_difference": 4.76837158203125e-07,
+          "score_difference_is_gate": false,
+          "dtype": "float32",
+          "rule": "exact fresh node predictions and Acc; ordinary FP32 score noise recorded only"
+        }
+      },
+      "mag": {
+        "result": "exp/smoke_mriemgnn_mag_20261015_a/mag/seed1024/result.json",
+        "replay": "exp/smoke_mriemgnn_mag_20261015_a/mag/seed1024/replay.json",
+        "numerics": {
+          "max_abs_logit_difference": 4.76837158203125e-07,
+          "score_difference_is_gate": false,
+          "dtype": "float32",
+          "rule": "exact fresh node predictions and Acc; ordinary FP32 score noise recorded only"
+        }
+      }
+    }
+  }
+}
