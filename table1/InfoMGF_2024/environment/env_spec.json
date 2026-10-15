@@ -1,0 +1,28 @@
+{
+  "environment": "coe",
+  "python": "/home/chenzhichao/miniconda3/envs/coe/bin/python",
+  "packages_required": [
+    "torch",
+    "dgl",
+    "numpy",
+    "scipy",
+    "sklearn"
+  ],
+  "unused_official_packages": [
+    "munkres",
+    "kmeans-pytorch"
+  ],
+  "policy": "coe read-only; clone only if actual classifier/graph kernel fails",
+  "environment_name": "coe",
+  "resolved_environment": "coe",
+  "clone_performed": false,
+  "package_changes": [],
+  "actual_execution_status": "passed_cpu_and_cuda",
+  "executor_model": "current inherited session model; exact identifier not exposed",
+  "independent_reviewer": "not_run",
+  "evidence": {
+    "gpu_formulas": "log/dev_final_inputs_20261015_b/gpu_formulas.log",
+    "full_mag": "exp/smoke_infomgf_mag_cuda_20261015_a/mag/seed1024/replay.json",
+    "flickr_fixed_inputs": "log/dev_final_inputs_20261015_b/check_report.json"
+  }
+}
