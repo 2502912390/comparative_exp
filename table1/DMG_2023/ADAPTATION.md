@@ -24,10 +24,31 @@ Representation is the final S plus arithmetic mean private embeddings. The final
 
 Use existing coe if its actual sparse kernels and short real-data training succeed. Unused author PyG/YAML/download dependencies are not installed; coe is never mutated. CPU/GPU checks: `PYTHONPATH=/home/chenzhichao/Research/other_exp <coe_python> -m reproduce.checks --device cpu` from this method folder. Real smoke: `-m reproduce.run --dataset acm --seed 1024 --device cuda:0 --phase smoke --run-id unique_smoke`. A one-update full MAG smoke uses the same invocation with dataset mag; no graph truncation.
 
-Background matrix: `python -u -m reproduce.run_matrix --run-id formal_dmg_author_defaults_20261015_a --device cuda:0` under a detached tmux with an explicitly reserved CUDA_VISIBLE_DEVICES. It executes the fixed 25 formal runs and separate fresh-process replay, then calls strict public statistics. Failed jobs are retained and status.json records failure; no replacement configuration is searched. All outputs are in log/exp in this directory. Do not reuse a run-id or mix smoke into formal results.
+Background matrix: `python -u -m reproduce.run_matrix --run-id formal_dmg_author_defaults_20261015_b --device cuda:0` under a detached tmux with an explicitly reserved CUDA_VISIBLE_DEVICES. It executes the fixed 25 formal runs and separate fresh-process replay, then calls strict public statistics. Failed jobs are retained and status.json records failure; no replacement configuration is searched. All outputs are in log/exp in this directory. Do not reuse a run-id or mix smoke into formal results.
 
 Reproduction executor: inherited current session model, exact model ID not exposed. Independent reviewer: not_run. This is an explicitly disclosed algorithm-preserving data/framework adaptation, not an assertion of byte-identical execution of the original runner. Sparse CUDA reductions may not be bitwise deterministic.
 
 ## Verified execution environment
 
 Existing `/home/chenzhichao/miniconda3/envs/coe` executes this adapter. No clone or package installation/modification was needed. CPU ACM short training and independent-process replay passed. CUDA asymmetric formula checks and a full 113919-node MAG native-objective update passed; a fresh process restored the whole MAG model, feature masks, S and head and passed the original exact class/1e-6 score replay assertions. See `environment/PREFLIGHT.md` and `environment/env_spec.json`. These smoke runs are excluded from formal statistics.
+
+## Necessary inference precision repair
+
+The first fixed-default formal batch (`formal_dmg_author_defaults_20261015_a`)
+stopped visibly at ACM seed1025: FP32 sparse CUDA reductions changed repeated
+logits by 1.9073486328125e-6, beyond the original fixed 1e-6 replay threshold.
+All class predictions were identical. The failed batch, weights and diagnosis
+remain archived, and are excluded from the replacement batch.
+
+Backbone and linear-head training retain native FP32 and all author defaults.
+Validation, export and independent replay consistently use FP64 inference copies
+of the same trained weights and native-normalized sparse adjacency. S remains
+the saved native S; no SVD, training or new sampling occurs during replay. The
+linear head's train-only fitting still uses its native FP32 embedding; validation
+uses its current weights in the FP64 evaluation path. This is numerical execution
+precision, not a new objective, hyperparameter search or relaxed assertion.
+Two independent same-weight FP64 inferences differed by only 3.55e-15 and kept
+every class prediction from the failed export. Evidence: the archived ACM
+seed1025 `precision_diagnosis.json`. All 25 formal seeds restart from scratch
+under a new run ID and frozen source/config hashes; old and new batches are
+never pooled.

@@ -15,21 +15,34 @@ from .common import METHOD_DIR,DATASETS,resolve_config,args_for,prepare_graphs,s
 from .model import GNNDAE,Measure_F,LogReg,drop_feature_record,update_S,training_step
 
 
-def reconstruct(data,payload,device):
+def inference_embedding(data,payload,device):
+    """Same fixed weights/operators, FP64 evaluation only; no fitting or SVD."""
     args=args_for(payload['config'],data)
     adjs,_,_=prepare_graphs(data,args.sc,device)
-    model=GNNDAE(args).to(device);model.load_state_dict(payload['model_state']);model.eval()
-    head=LogReg(args.c_dim+args.p_dim,data.classes).to(device);head.load_state_dict(payload['head_state']);head.eval()
+    adjs=[a.double() for a in adjs]
+    model=GNNDAE(args).double().to(device)
+    model.load_state_dict(payload['model_state']);model.eval()
+    if len(payload['feature_drop_masks'])!=len(data.features):
+        raise ValueError('Missing relation feature masks')
     features=[]
     for canonical,mask in zip(data.features,payload['feature_drop_masks']):
-        if mask.dtype!=torch.bool or mask.shape!=(canonical.shape[1],): raise ValueError('Feature mask differs from canonical dimensions')
-        x=canonical.to(device).clone();x[:,mask.to(device)]=0;features.append(x)
-    if len(features)!=len(data.features):raise ValueError('Missing relation feature drop masks')
+        if mask.dtype!=torch.bool or mask.shape!=(canonical.shape[1],):
+            raise ValueError('Feature mask differs from canonical dimensions')
+        x=canonical.to(device=device,dtype=torch.float64).clone()
+        x[:,mask.to(device)]=0;features.append(x)
     with torch.no_grad():
         _,private=model.embed(features,adjs)
-        embedding=torch.cat([payload['S'].to(device),sum(private)/args.num_view],1)
-        scores=head(embedding)
-    return scores
+        return torch.cat([payload['S'].to(device=device,dtype=torch.float64),
+                          sum(private)/args.num_view],1)
+
+
+def reconstruct(data,payload,device):
+    args=args_for(payload['config'],data)
+    head=LogReg(args.c_dim+args.p_dim,data.classes).double().to(device)
+    head.load_state_dict(payload['head_state']);head.eval()
+    embedding=inference_embedding(data,payload,device)
+    with torch.no_grad():
+        return head(embedding)
 
 
 def main():
@@ -80,6 +93,7 @@ def main():
     S=update_S(model,features,adjs,args.c_dim)
     with torch.no_grad():
         _,private=model.embed(features,adjs);embedding=torch.cat([S,sum(private)/args.num_view],1).detach()
+    eval_embedding=inference_embedding(data,{'config':config,'model_state':model.state_dict(),'feature_drop_masks':feature_drop_masks,'S':S},opts.device)
     head_optimizer=torch.optim.Adam(head.parameters(),lr=args.test_lr)
     train,val=data.indices('train').to(opts.device),data.indices('val').to(opts.device)
     labels=data.labels.to(opts.device)
@@ -87,7 +101,7 @@ def main():
     fixed_payload={'model_state':model.state_dict(),'measurements_state':measurements.state_dict(),'pretrain_optimizer_state':optimizer.state_dict(),'S':S,'feature_drop_masks':feature_drop_masks,'config':config,'config_sha256':manifest['config_sha256'],'pretrain_iteration':itr}
     for epoch in range(1,args.test_epo+1):
         head.train();head_optimizer.zero_grad();loss=nn.functional.cross_entropy(head(embedding[train]),labels[train]);loss.backward();head_optimizer.step();head.eval()
-        with torch.no_grad():val_acc=float((head(embedding[val]).argmax(1)==labels[val]).float().mean())
+        with torch.no_grad():val_acc=float((nn.functional.linear(eval_embedding[val],head.fc.weight.double(),head.fc.bias.double()).argmax(1)==labels[val]).float().mean())
         if not torch.isfinite(loss):raise FloatingPointError('Nonfinite linear probe CE')
         if val_acc>checkpoint.best_acc:
             checkpoint.consider(epoch,val_acc,{**fixed_payload,'head_state':head.state_dict(),'head_optimizer_state':head_optimizer.state_dict()})

@@ -25,5 +25,11 @@
     "cpu_acm": "exp/smoke_dmg_acm_cpu_20261015_a/acm/seed1024/replay.json",
     "cuda_formulas": "exp/smoke_dmg_checks_20261015_a/checks.json",
     "full_mag": "exp/smoke_dmg_mag_cuda_20261015_a/mag/seed1024/replay.json"
+  },
+  "numerical_execution": {
+    "training": "float32",
+    "validation_export_replay": "float64",
+    "score_atol": 1e-06,
+    "assertion_relaxed": false
   }
 }

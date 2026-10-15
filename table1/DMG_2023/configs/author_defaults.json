@@ -63,6 +63,9 @@
     "features": "canonical unchanged",
     "graph": "positive support, replace diagonal by sc, DMG symmetric degree normalization",
     "checkpoint": "strict validation accuracy earliest tie, only train labels fit linear head",
-    "backbone_stop": "native loss strict decrease; count deterioration only after itr100; patience20"
+    "backbone_stop": "native loss strict decrease; count deterioration only after itr100; patience20",
+    "training_dtype": "float32",
+    "validation_export_replay_dtype": "float64",
+    "inference_precision_reason": "measured sparse CUDA FP32 score replay error 1.9073486328125e-6 exceeds fixed 1e-6; identical class predictions"
   }
 }
