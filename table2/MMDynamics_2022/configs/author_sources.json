@@ -1,0 +1,10 @@
+{
+  "author_commit": "06a2bb8a66953be77c53e6a027bc04193c5bdca4",
+  "code_url": "https://github.com/TencentAILabHealthcare/mmdynamics",
+  "files": {
+    "code/model.py": "4d4343e3725596b3fe0a3141a9b162600603b23beef1ed211d610402c28ab1ca",
+    "code/train_test.py": "3b53670b6bc8a5480682adea0d9442adad8413537edb0eddb5d4178411bb7884",
+    "code/main.py": "b500019258672cf95359c542250881cfd62342ce48db1bf21692adf74a0a9ead",
+    "code/readme.md": "623fdbae237d05d5f51d7393877214cdd4c452476503d3752640cf17adf54c76"
+  }
+}

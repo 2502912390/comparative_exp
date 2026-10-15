@@ -1,0 +1,8 @@
+{
+  "preferred_environment": "coe",
+  "python": "/home/chenzhichao/miniconda3/envs/coe/bin/python",
+  "required_packages": ["torch", "numpy", "scipy", "scikit-learn"],
+  "package_changes": [],
+  "clone_policy": "only after actual required-path import/training/replay incompatibility",
+  "remote_upload": false
+}

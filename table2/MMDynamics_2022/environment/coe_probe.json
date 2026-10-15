@@ -1,0 +1,14 @@
+{
+  "python_executable": "/home/chenzhichao/miniconda3/envs/coe/bin/python",
+  "python": "3.10.21 (main, Aug 27 2026, 14:42:07) [GCC 14.3.0]",
+  "torch": "2.1.1+cu121",
+  "torch_cuda": "12.1",
+  "numpy": "1.26.4",
+  "scipy": "1.15.3",
+  "sklearn": "1.5.2",
+  "cuda_available": true,
+  "cuda_device_count": 8,
+  "package_changes": [],
+  "clone_required": false,
+  "status": "imports_only_training_witness_pending"
+}

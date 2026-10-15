@@ -1,0 +1,67 @@
+{
+  "parameter_policy": "author_default_no_hpo",
+  "selection_basis": "Official main.py selects BRCA; transfer this numeric training profile uniformly to all four Table2 datasets before any training. Do not load BRCA data or author checkpoints. ROSMAP profile is not compared.",
+  "author_commit": "06a2bb8a66953be77c53e6a027bc04193c5bdca4",
+  "parameters": {
+    "hidden_dim": [
+      {
+        "value": [
+          1000
+        ],
+        "source": "code/train_test.py::train BRCA branch"
+      }
+    ],
+    "num_epoch": {
+      "value": 2500,
+      "source": "code/train_test.py::train BRCA branch"
+    },
+    "training_updates": {
+      "value": 2501,
+      "source": "code/train_test.py::train range(num_epoch+1); original epoch0..2500"
+    },
+    "lr": {
+      "value": 0.0001,
+      "source": "code/train_test.py::train BRCA branch"
+    },
+    "weight_decay": {
+      "value": 0.0001,
+      "source": "code/train_test.py::train Adam call"
+    },
+    "dropout": {
+      "value": 0.5,
+      "source": "code/train_test.py::train MMDynamic constructor"
+    },
+    "step_size": {
+      "value": 500,
+      "source": "code/train_test.py::train BRCA branch"
+    },
+    "gamma": {
+      "value": 0.2,
+      "source": "code/train_test.py::train StepLR call"
+    },
+    "optimizer": {
+      "value": "Adam",
+      "source": "code/train_test.py::train; betas=(0.9,0.999),eps=1e-8 remain PyTorch defaults"
+    },
+    "batching": {
+      "value": "full_outer_train_split",
+      "source": "code/train_test.py::train_epoch called once per author epoch on data_tr_list"
+    },
+    "early_stopping": {
+      "value": null,
+      "source": "code/train_test.py::train has a fixed loop and no stopping rule"
+    },
+    "validation_interval": {
+      "value": 1,
+      "source": "protocol adaptation: check fixed outer validation after each update; strict ACC best, earliest ties"
+    },
+    "input_dims_classes": {
+      "value": "canonical dataset metadata",
+      "source": "shared.coe_benchmark; two text/image views; no author omics CSV/minmax"
+    },
+    "loss_coefficients": {
+      "value": "all native unit coefficients",
+      "source": "code/model.py::MMDynamic.forward; no changes"
+    }
+  }
+}

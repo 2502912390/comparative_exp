@@ -1,0 +1,22 @@
+{
+  "parameter_policy": "author_default_no_hpo",
+  "parameter_profile": "official_main_BRCA_training_defaults_only",
+  "hidden_dim": [1000],
+  "dropout": 0.5,
+  "optimizer": "Adam",
+  "lr": 0.0001,
+  "weight_decay": 0.0001,
+  "adam_betas": [0.9, 0.999],
+  "adam_eps": 1e-8,
+  "scheduler": "StepLR",
+  "step_size": 500,
+  "gamma": 0.2,
+  "author_num_epoch": 2500,
+  "training_updates": 2501,
+  "batching": "full_outer_train_split",
+  "early_stopping": "none_in_author_code",
+  "validation_interval_updates": 1,
+  "checkpoint_rule": "strict_validation_accuracy_earliest_tie",
+  "input_adaptation": "canonical_text_image_no_additional_normalization",
+  "precision": "float32"
+}
