@@ -14,6 +14,30 @@ author = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(author)
 
 
+def gumbel_aggregate(qp, kp, value, scaled_gumbels):
+    """Rescale each (batch, head, sample) over all keys; factor cancels.
+
+    The unchanged exponential draw can be float32.tiny, giving g/tau=349
+    at tau=.25. Exponentiating it directly overflows, although the normalized
+    attention is well defined. No clipping, resampling, or sample removal.
+    """
+    noise = (scaled_gumbels - scaled_gumbels.amax(dim=0, keepdim=True)).exp()
+    weighted_keys = kp.unsqueeze(3) * noise.unsqueeze(4)
+    num = author.numerator_gumbel(qp, weighted_keys, value)
+    den = author.denominator_gumbel(qp, weighted_keys)
+    return (num / den.unsqueeze(-1)).mean(3).permute(1, 0, 2, 3)
+
+
+def stable_kernelized_gumbel(query, key, value, kernel, projection, samples, tau):
+    qp = kernel(query / tau**0.5, True, projection).permute(1, 0, 2, 3)
+    kp = kernel(key / tau**0.5, False, projection).permute(1, 0, 2, 3)
+    value = value.permute(1, 0, 2, 3)
+    # Exactly the author's CPU exponential draw and device/temperature order.
+    gumbels = (-torch.empty(kp.shape[:-1] + (samples,),
+        memory_format=torch.legacy_contiguous_format).exponential_().log()).to(query.device) / tau
+    return gumbel_aggregate(qp, kp, value, gumbels)
+
+
 class EdgeLog(torch.autograd.Function):
     """Exact mean(log(attention_ij)/degree_i) and analytical first gradient."""
     @staticmethod
@@ -70,8 +94,8 @@ class Conv(author.NodeFormerConv):
         projection = projection.detach().clone()
         def aggregate(query, key, value):
             if self.use_gumbel and self.training:
-                return author.kernelized_gumbel_softmax(query, key, value,
-                    self.kernel_transformation, projection, adjs[0], self.nb_gumbel_sample, tau, False)
+                return stable_kernelized_gumbel(query, key, value,
+                    self.kernel_transformation, projection, self.nb_gumbel_sample, tau)
             return author.kernelized_softmax(query, key, value,
                 self.kernel_transformation, projection, adjs[0], tau, False)
         if self.training and self.activation_checkpoint:

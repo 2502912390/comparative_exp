@@ -31,3 +31,12 @@ are saved explicitly; selected validation forward and exported logits replayed.
 After smoke validation, scheduling/logging changes include all shared sources
 and registries in frozen_sources.json. Each queued job rejects source changes.
 Formal dispatch uses currently free GPUs 4,5,7 and 25 preplanned jobs.
+
+2026-10-15 follow-up: initial v1 dispatch finished incomplete (3/25 complete,
+22 nonfinite losses). The environment and extensions are healthy. Reproduced
+full MAG epoch165 with saved epoch164 model and RNG: raw scaled Gumbel=349.346,
+exp overflow in official kernel, then Inf/Inf. Exact factor-canceling maximum
+subtraction fixes this arithmetic without changing package/config/RNG draws.
+Normal official and extreme-input dense FP64 value/gradient witnesses pass in
+log/dev_numerics/stable_equations_host.log. New batch restarts every seed and
+uses GPUs0,1,2,3,7 (free at relaunch); no prior results are mixed.

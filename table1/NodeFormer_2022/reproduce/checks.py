@@ -4,7 +4,7 @@ import json
 import torch
 from shared.coe_benchmark import seed_everything, capture_rng, restore_rng
 from .common import setup, read_config
-from .model import author, build_model
+from .model import author, build_model, gumbel_aggregate
 
 
 def main():
@@ -51,7 +51,27 @@ def main():
             results.append({'training':training,'rb_order':rb_order,'output_max_error':float((got-out).abs().max()),
                 'link_max_error':float((torch.stack(ll)-torch.stack(links)).abs().max()),
                 'input_grad_max_error':float((xx.grad-x.grad).abs().max())})
+    # Independent dense attention reference for the exact overflow magnitude
+    # observed in full MAG. Compare FP32 production against a dense FP64 reference.
+    q = (torch.rand(5,1,2,3,device=a.device)+.1).requires_grad_()
+    k = (torch.rand_like(q)+.1).requires_grad_()
+    v = torch.randn(5,1,2,4,device=a.device,requires_grad=True)
+    g = torch.randn(5,1,2,3,device=a.device)
+    g[1,0,0,0] = 349.34619140625
+    g[3,0,1,2] = 349.34619140625
+    got = gumbel_aggregate(q,k,v,g)
+    similarity = torch.einsum('nbhm,sbhm->nsbh',q.double(),k.double())
+    dense = (similarity.log().unsqueeze(-1)+g.double().unsqueeze(0)).softmax(dim=1)
+    target = torch.einsum('nsbhk,sbhd->nbhkd',dense,v.double()).mean(3).permute(1,0,2,3)
+    torch.testing.assert_close(got.double(),target,atol=1e-6,rtol=1e-5)
+    grad_got = torch.autograd.grad(got.square().sum(),(q,k,v),retain_graph=True)
+    grad_target = torch.autograd.grad(target.square().sum(),(q,k,v))
+    for actual,reference in zip(grad_got,grad_target):
+        torch.testing.assert_close(actual,reference,atol=2e-6,rtol=1e-4)
+    stress = {'scaled_gumbel_max':float(g.max()),'dense_reference_max_error':float((got-target).abs().max()),
+        'gradient_max_error':max(float((x-y).abs().max()) for x,y in zip(grad_got,grad_target))}
     print('WITNESS '+json.dumps({'device':a.device,'gpu':torch.cuda.get_device_name() if 'cuda' in a.device else None,
+        'overflow_stress':stress,
         'official_output_and_gradients':results,'model':'current_session_model','reviewer':'not_run'}),flush=True)
 
 if __name__=='__main__': main()

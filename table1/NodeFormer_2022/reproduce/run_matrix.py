@@ -84,5 +84,8 @@ def main():
     print('MATRIX_FINISHED '+summary['status'],flush=True)
     if summary['status']!='complete':
         raise SystemExit(1)
+    # User requested registration once this batch is complete.
+    from .record_results import record
+    record(root)
 
 if __name__=='__main__': main()

@@ -56,3 +56,32 @@ Clone `coe_baseline_nodeformer`, keep torch 2.1.1+cu121, install matched
 pt21cu121 scatter/sparse wheels and PyG 2.5.3. See environment documentation.
 All checks, logs, failures, source snapshots and results stay in this method's
 log/exp. Core source/config/documentation only is committed.
+
+## 2026-10-15 numerical correction
+
+The initial `formal_nodeformer_author_defaults_20261015_v1` batch ended
+incomplete: 3 completed/replayed jobs and 22 nonfinite-training-loss failures.
+From MAG seed1024's best epoch164, the next epoch165 failure was reproduced:
+the unchanged CPU exponential draw contained float32.tiny=1.17549435e-38,
+so -log(draw)/tau=349.346 at tau=.25. The author's direct exp overflows, and
+normalized attention becomes Inf/Inf although all parameters and edge losses
+are finite. Evidence: `log/dev_numerics/mag_failure_diagnosis.log`.
+
+The corrected training kernel uses exp(g-max_nodes(g)) for each graph/head/K
+sample. This multiplies all keys by one common positive factor, which cancels
+between attention numerator and denominator. It keeps the exact original CPU
+exponential draw, device movement, tau, K samples and random features. It does
+not clip, resample, skip an update, remove nodes/edges or change optimizer/budget.
+The original author source remains untouched. Projection and inference policies
+are unchanged. All training parameters remain exactly configs/default.json.
+
+Normal finite-input output/gradient comparisons with unmodified official code
+pass. For g=349.346 the FP32 stable operator agrees with an independent dense
+FP64 all-pair attention reference (max output error 1.24e-7, max gradient error
+5.37e-7). Evidence: `log/dev_numerics/stable_equations_host.log`.
+
+The corrected batch is `formal_nodeformer_author_defaults_stable_20261015_v2`:
+all 25 jobs restart from scratch with seeds1024–1028. No v1 result is pooled
+with it. After complete training, separate-process replay and identity/statistics
+verification, the queue records this batch in the user-requested root
+`EXPERIMENT_RESULTS.md`; an incomplete batch is rejected by that recorder.

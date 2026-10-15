@@ -17,3 +17,12 @@ The matrix also runs separate-process checkpoint replay per job, updates
 queue_status.json and summary.json/csv/table_rows.tex under exp/<run>.
 Any failure is preserved with traceback, and missing jobs keep summary incomplete.
 No hyperparameter searches, test-based checkpoint/config choices or dataset edits.
+
+The initial v1 batch is incomplete due to official Gumbel exponent overflow.
+The corrected batch is `formal_nodeformer_author_defaults_stable_20261015_v2`;
+see ADAPTATION.md for the reproduced failure and equivalent stable arithmetic.
+`bash table1/NodeFormer_2022/reproduce/launch_formal.sh` launches the corrected
+25-job queue on GPUs0/1/2/3/7. It automatically fills the NodeFormer row and
+source/seed records in `EXPERIMENT_RESULTS.md` only after all25 jobs pass the
+complete-five-seed and independent replay gates. That file is written at the
+user's explicit request; all other runtime artifacts stay in method log/exp.
