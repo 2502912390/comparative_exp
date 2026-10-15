@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "method": "Mowst-GCN",
+  "base": "/home/chenzhichao/miniconda3/envs/coe",
+  "resolved_environment": "coe_baseline_mowst",
+  "pip_phases": [
+    [
+      "torch-geometric==2.5.3"
+    ]
+  ],
+  "required_core": [
+    "torch==2.1.1+cu121",
+    "numpy==1.26.4",
+    "scipy==1.15.3"
+  ],
+  "resource": {
+    "gpus_per_worker": 1,
+    "physical_gpu": 7,
+    "cpu_threads": 2
+  },
+  "clone_trigger": "Required native GCNConv cannot import in coe",
+  "weights": null,
+  "independent_reviewer": "not_run; no subagents authorized",
+  "validation": "native default checks + all five complete-node short train/replay tests passed",
+  "reference_check_report": "exp/smoke_mowst_native_20261015_a/preflight.json"
+}

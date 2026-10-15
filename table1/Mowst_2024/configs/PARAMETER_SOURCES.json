@@ -1,0 +1,23 @@
+{
+  "parameter_policy": "author_default_no_hpo",
+  "author_commit": "2e3569962d2388bfda4535cdd1fc0b6eaec88a28",
+  "numeric_hyperparameters": "code/main.py parser defaults (lines 42-112); same fixed values on all five datasets because their IDs are absent from author recipes",
+  "variant": {
+    "method": "code/main.py method=mowst; code/utils.py initialize_experiment forces separate/multi",
+    "submethod": "code/README.md first Mowst-GCN reproduction command uses pretrain_model2",
+    "original_data": "code/README.md first Mowst-GCN command uses false; parser default none does not construct a gate and is not executable",
+    "numeric_recipe_overrides": false
+  },
+  "budget": "code/main.py epoch=20000, big_epoch=20000, patience=100, big_patience=10; preserve > comparison in stopping checks",
+  "optimizer": "code/train_test_engine.py MowstEngine.initialize: AdamW unless --adam; MLP+gate and GCN both use lr, lr_gate joint optimizer is unused for Mowst",
+  "inference": "Algorithm 1 and code/train_test_engine.py eval_for_multi: 50 Bernoulli-route prediction draws, mean of draw accuracies; not majority vote or probability averaging",
+  "evaluation_rng_offsets": {
+    "validation": 1000000,
+    "test": 2000000,
+    "reason": "Protocol requires independent replayable evaluation RNG; offsets fixed before training, no score-based selection"
+  },
+  "required_checkpoint_adaptation": "save/restore MLP, GCN, gate and BN buffers together; author wrappers omit gate from saved Mowst snapshots",
+  "pretrain_validation_fix": "author val_loss_vanilla indexes train_mask; use actual validation mask for stopping, strict validation ACC for pretrained checkpoint selection",
+  "executor_model": "current session GPT-6",
+  "independent_reviewer": "not_run; no subagents authorized"
+}

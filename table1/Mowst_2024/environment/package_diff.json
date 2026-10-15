@@ -1,0 +1,7 @@
+{
+  "added": {
+    "torch-geometric": "2.5.3"
+  },
+  "changed": {},
+  "removed": {}
+}

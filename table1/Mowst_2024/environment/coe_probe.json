@@ -1,0 +1,25 @@
+{
+  "recorded_at": "2026-10-15T11:03:50.879619",
+  "base_environment": "/home/chenzhichao/miniconda3/envs/coe",
+  "python": "3.10.21",
+  "torch": "2.1.1+cu121",
+  "torch_geometric": {
+    "status": "missing",
+    "error": "ModuleNotFoundError: No module named 'torch_geometric'"
+  },
+  "clone_trigger": "Required native GCNConv cannot import in coe",
+  "coe_modified": false,
+  "executor": "current session model; no subagents",
+  "resolved_environment": "coe_baseline_mowst",
+  "native_GPU_forward_backward": "passed",
+  "full_node_smoke_and_exact_MC50_replay": "passed",
+  "preflight_report": "table1/Mowst_2024/exp/smoke_mowst_native_20261015_a/preflight.json",
+  "base_torch_geometric_still_missing": true,
+  "package_diff": {
+    "added": {
+      "torch-geometric": "2.5.3"
+    },
+    "changed": {},
+    "removed": {}
+  }
+}
